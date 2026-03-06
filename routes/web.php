@@ -3,8 +3,10 @@
 use App\Http\Controllers\KontakController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\BlogController;
 use App\Models\Hero;
 use App\Models\Produk;
+use App\Models\Blog;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -14,17 +16,13 @@ Route::get('/', function () {
         ->latest()
         ->get()
         ->map(function ($hero) {
-            return [
-                'id'          => $hero->id,
-                'heading'     => $hero->heading,
-                'sub_heading' => $hero->sub_heading,
-                'cta_label'   => $hero->cta_label,
-                'cta_link'    => $hero->cta_link,
-                'hero_image'  => $hero->hero_image
-                    ? \Illuminate\Support\Facades\Storage::url($hero->hero_image)
-                    : null,
-                'status'      => $hero->status,
-            ];
+            if ($hero->hero_image === null) {
+                return null;
+            }
+            $hero->hero_image = (str_starts_with($hero->hero_image, 'http://') || str_starts_with($hero->hero_image, 'https://'))
+                ? $hero->hero_image
+                : Storage::url($hero->hero_image);
+            return $hero;
         })
         ->filter()
         ->values();
@@ -68,11 +66,29 @@ Route::get('/', function () {
             ];
         });
 
+    // 3 artikel terbaru untuk preview di homepage
+    $blogs = Blog::where('is_published', true)
+        ->latest('published_at')
+        ->take(3)
+        ->get()
+        ->map(function ($item) {
+            return [
+                'id'           => $item->id,
+                'judul'        => $item->judul,
+                'slug'         => $item->slug,
+                'excerpt'      => $item->excerpt,
+                'thumbnail'    => $item->thumbnail ? Storage::url($item->thumbnail) : null,
+                'kategori'     => $item->kategori,
+                'published_at' => $item->published_at?->format('d M Y'),
+            ];
+        });
+
     return Inertia::render('Index', [
         'heroes'   => $heroes,
         'galleries' => $galleries,
         'partners' => $partners,
         'produks'  => $produks,
+        'blogs'    => $blogs,
     ]);
 });
 
@@ -87,3 +103,6 @@ Route::prefix('admin')->group(function () {
 });
 
 Route::get('/produk/{slug}', [ProdukController::class, 'show'])->name('produk.show');
+
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');

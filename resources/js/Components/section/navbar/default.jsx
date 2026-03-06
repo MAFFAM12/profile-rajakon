@@ -10,24 +10,26 @@ import { Sheet, SheetContent, SheetTrigger } from "../../ui/sheet";
 import Rajakon from "../../logos/rajakon";
 
 const desktopLinks = [
-  { text: "Tentang", href: "#tentang" },
-  { text: "Layanan", href: "#layanan" },
-  { text: "Klien", href: "#klien" },
-  { text: "Produk", href: "#produk" },
-  { text: "Dokumentasi", href: "#dokumentasi" },
-  { text: "Kontak", href: "#kontak" },
+  { text: "Tentang", href: "/#tentang" },
+  { text: "Layanan", href: "/#layanan" },
+  { text: "Klien", href: "/#klien" },
+  { text: "Produk", href: "/#produk" },
+  { text: "Blog", href: "/blog" },
+  { text: "Dokumentasi", href: "/#dokumentasi" },
+  { text: "Kontak", href: "/#kontak" },
 ];
 
 export default function Navbar({
   logo = <Rajakon />,
   homeUrl = "/",
   mobileLinks = [
-    { text: "Tentang", href: "#tentang" },
-    { text: "Layanan", href: "#layanan" },
-    { text: "Klien", href: "#klien" },
-    { text: "Produk", href: "#produk" },
-    { text: "Dokumentasi", href: "#dokumentasi" },
-    { text: "Kontak", href: "#kontak" },
+    { text: "Tentang", href: "/#tentang" },
+    { text: "Layanan", href: "/#layanan" },
+    { text: "Klien", href: "/#klien" },
+    { text: "Produk", href: "/#produk" },
+    { text: "Blog", href: "/blog" },
+    { text: "Dokumentasi", href: "/#dokumentasi" },
+    { text: "Kontak", href: "/#kontak" },
   ],
   actions = [
     {
@@ -48,10 +50,7 @@ export default function Navbar({
       <div className="max-w-container relative mx-auto">
         <NavbarComponent>
           <NavbarLeft>
-            <a
-              href={homeUrl}
-              className="flex items-center gap-2 text-xl font-bold"
-            >
+            <a href={homeUrl} className="flex items-center gap-2 text-xl font-bold">
               {logo}
             </a>
 
@@ -102,11 +101,7 @@ export default function Navbar({
 
             <Sheet>
               <SheetTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="shrink-0 md:hidden"
-                >
+                <Button variant="ghost" size="icon" className="shrink-0 md:hidden">
                   <Menu className="size-5" />
                   <span className="sr-only">Toggle navigation menu</span>
                 </Button>
@@ -114,10 +109,7 @@ export default function Navbar({
 
               <SheetContent side="right" className="w-[300px] sm:w-[400px]">
                 <nav className="grid gap-6 text-lg font-medium mt-8">
-                  <a
-                    href={homeUrl}
-                    className="flex items-center gap-2 text-xl font-bold mb-6"
-                  >
+                  <a href={homeUrl} className="flex items-center gap-2 text-xl font-bold mb-6">
                     {logo}
                   </a>
 
