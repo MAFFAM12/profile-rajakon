@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('produks', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('badge')->default('Produk'); // label badge merah
+            $table->string('badge')->default('Produk'); // label badge untuk identifikasi produk
             $table->text('deskripsi');
-            $table->text('manfaat')->nullable(); // simpan sebagai JSON atau text
+            $table->json('manfaat')->nullable(); // disimpan sebagai JSON array untuk multiple benefits
             $table->decimal('harga', 15, 2)->nullable();
-            $table->json('gambar')->nullable(); // multiple images
+            $table->json('gambar')->nullable(); // multiple images dalam format JSON array
             $table->string('slug')->unique();
             $table->boolean('is_active')->default(true);
-            $table->integer('urutan')->default(0);
+            $table->integer('urutan')->default(0); // untuk sorting order di frontend
             $table->timestamps();
         });
     }
