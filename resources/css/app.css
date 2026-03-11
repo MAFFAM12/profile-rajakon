@@ -266,6 +266,15 @@
   }
 }
 
+@keyframes logo-loop {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-100% / 2));
+  }
+}
+
 .animate-slide-from-left,
 .animate-slide-from-right {
   animation: slide-from-left 0.7s ease-out forwards;
@@ -273,4 +282,46 @@
 
 .animate-slide-from-right {
   animation: slide-from-right 0.7s ease-out forwards;
+}
+
+.logo-loop-container {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+.logo-loop-container::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  background: linear-gradient(to right, transparent, rgb(255, 255, 255));
+  pointer-events: none;
+  z-index: 10;
+}
+
+.logo-loop-track {
+  display: flex;
+  gap: 3rem;
+  animation: logo-loop 30s linear infinite;
+  align-items: center;
+}
+
+.logo-loop-track:hover {
+  animation-play-state: paused;
+}
+
+.logo-loop-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all duration-500;
+}
+
+.logo-loop-item:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 10px 15px -3px rgba(79, 39, 245, 0.3));
 }

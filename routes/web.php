@@ -16,12 +16,29 @@ Route::get('/', function () {
         ->latest()
         ->get()
         ->map(function ($hero) {
-            if ($hero->hero_image === null) {
+            // Check if hero has images in array or hero_image field
+            $hasImages = !empty($hero->images) || !empty($hero->hero_image);
+            
+            if (!$hasImages) {
                 return null;
             }
-            $hero->hero_image = (str_starts_with($hero->hero_image, 'http://') || str_starts_with($hero->hero_image, 'https://'))
-                ? $hero->hero_image
-                : Storage::url($hero->hero_image);
+            
+            // Process images array if exists
+            if (!empty($hero->images) && is_array($hero->images)) {
+                $hero->images = array_map(function ($image) {
+                    return (str_starts_with($image, 'http://') || str_starts_with($image, 'https://'))
+                        ? $image
+                        : Storage::url($image);
+                }, $hero->images);
+                
+                $hero->hero_image = $hero->images[0];
+            } elseif (!empty($hero->hero_image)) {
+                // Process single hero_image field
+                $hero->hero_image = (str_starts_with($hero->hero_image, 'http://') || str_starts_with($hero->hero_image, 'https://'))
+                    ? $hero->hero_image
+                    : Storage::url($hero->hero_image);
+            }
+            
             return $hero;
         })
         ->filter()

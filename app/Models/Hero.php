@@ -18,6 +18,8 @@ class Hero extends Model
         'cta_link',
         'cta_label',
         'hero_image',
+        'images',
+        'images_display_type',
         'status',
         'created_by',
         'updated_by',
@@ -25,6 +27,7 @@ class Hero extends Model
 
     protected $casts = [
         'status' => 'boolean',
+        'images' => 'array',
     ];
 
     // Optionally, add relationships to User for created_by and updated_by

@@ -3,12 +3,11 @@
 namespace App\Filament\Resources\Heroes\Schemas;
 
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 
 class HeroForm
 {
@@ -25,33 +24,31 @@ class HeroForm
                     ->label('CTA Link'),
                 TextInput::make('cta_label')
                     ->label('CTA Label'),
-                Select::make('image_type')
-                    ->label('Tipe Input Gambar')
-                    ->options([
-                        'upload' => 'Upload File',
-                        'url' => 'Embed URL',
-                    ])
-                    ->default('upload')
-                    ->reactive(),
                 Toggle::make('status')
                     ->label('Active')
                     ->default(true),
-                FileUpload::make('image_upload')
+                FileUpload::make('images')
                     ->disk('public')
-                    ->directory('main-hero')
+                    ->directory('hero-images')
                     ->acceptedFileTypes(['image/jpg', 'image/jpeg', 'image/png', 'image/webp'])
                     ->maxSize(51200) // 50MB
+                    ->multiple()
+                    ->reorderable()
                     ->downloadable()
                     ->columnSpanFull()
-                    ->label('Upload Gambar')
-                    ->visible(fn($get) => $get('image_type') === 'upload'),
-                TextInput::make('image_url')
-                    ->label('URL Gambar')
-                    ->placeholder('https://www.something.com/embed/xyz')
-                    ->url()
+                    ->label('Upload Gambar (Multiple)'),
+                Radio::make('images_display_type')
+                    ->label('Tipe Tampilan Gambar Multiple')
+                    ->options([
+                        'slide' => 'Slide (Carousel)',
+                        'card' => 'Card (Grid)',
+                    ])
+                    ->default('slide')
                     ->columnSpanFull()
-                    ->prefixIcon(Heroicon::Link)
-                    ->visible(fn($get) => $get('image_type') === 'url'),
+                    ->descriptions([
+                        'slide' => 'Gambar berganti otomatis seperti carousel',
+                        'card' => 'Gambar ditampilkan dalam grid',
+                    ]),
             ]);
     }
 }
