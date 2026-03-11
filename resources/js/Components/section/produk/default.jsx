@@ -87,7 +87,7 @@ const Produk = ({ produks = [] }) => {
                 {/* Header */}
                 <div className="text-center mb-16">
                     <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 animate-appear">
-                        Produk kami
+                        Produk Dan Jasa
                     </h2>
                     <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto animate-appear opacity-0 delay-75">
                         Solusi terbaik yang kami tawarkan untuk kebutuhan Anda.
