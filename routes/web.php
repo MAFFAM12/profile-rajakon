@@ -7,6 +7,7 @@ use App\Http\Controllers\BlogController;
 use App\Models\Hero;
 use App\Models\Produk;
 use App\Models\Blog;
+use App\Models\WebsiteSetting;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -100,12 +101,31 @@ Route::get('/', function () {
             ];
         });
 
+    // Website settings untuk footer dan informasi perusahaan
+    $websiteSettings = WebsiteSetting::where('is_active', true)
+        ->first();
+
+    $settingsData = null;
+    if ($websiteSettings) {
+        $settingsData = [
+            'id'                  => $websiteSettings->id,
+            'company_name'        => $websiteSettings->company_name,
+            'company_description' => $websiteSettings->company_description,
+            'phone'               => $websiteSettings->phone,
+            'email'               => $websiteSettings->email,
+            'address'             => $websiteSettings->address,
+            'logo'                => $websiteSettings->logo ? Storage::url($websiteSettings->logo) : null,
+            'social_media'        => $websiteSettings->social_media ?? [],
+        ];
+    }
+
     return Inertia::render('Index', [
         'heroes'   => $heroes,
         'galleries' => $galleries,
         'partners' => $partners,
         'produks'  => $produks,
         'blogs'    => $blogs,
+        'websiteSettings' => $settingsData,
     ]);
 });
 

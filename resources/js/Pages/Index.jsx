@@ -14,7 +14,7 @@ import Contact from '../Components/section/contact/default';
 import Footer from '../Components/section/footer/default';
 
 const Index = (props) => {
-  const { heroes, partners, galleries, produks } = props;
+  const { heroes, partners, galleries, produks, websiteSettings } = props;
 
   return (
     <Layout>
@@ -34,7 +34,7 @@ const Index = (props) => {
         <Contact />
       </main>
 
-      <Footer />
+      <Footer websiteSettings={websiteSettings} />
     </Layout>
   );
 };

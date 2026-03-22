@@ -10,11 +10,11 @@ const Clients = ({ partners = [] }) => {
 			<div className="max-w-container mx-auto flex flex-col items-center gap-6 sm:gap-20">
 				<div className="max-w-7xl mx-auto w-full">
 					{/* Section Header */}
-					<div className="text-center mb-16">
+					<div className="text-left md:text-center mb-16">
 						<h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 animate-appear">
 							Klien yang Memilih Kami
 						</h2>
-						<p className="text-lg text-gray-600 max-w-3xl mx-auto animate-appear opacity-0 delay-75">
+						<p className="text-md md:text-lg text-gray-600 max-w-3xl mx-auto animate-appear opacity-0 delay-75">
 							Bergabung dengan perusahaan-perusahaan terdepan yang mempercayakan visi mereka kepada kami
 						</p>
 					</div>

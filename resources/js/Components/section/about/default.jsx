@@ -30,7 +30,7 @@ function About({ className }) {
                 <div className='relative z-20'>
                     <div className="mx-auto w-full max-w-container">
                         <div>
-                            <h3 className="text-4xl font-bold text-gray-900 mb-6">Tentang Kami</h3>
+                            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 animate-appear">Tentang Kami</h2>
                             <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6'>
                                 <div className='space-y-6'>
                                     <div

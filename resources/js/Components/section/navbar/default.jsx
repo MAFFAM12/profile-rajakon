@@ -34,7 +34,7 @@ export default function Navbar({
   actions = [
     {
       text: "Konsultasi Gratis",
-      href: "https://wa.me/085320854929",
+      href: "https://wa.me/081221622132",
       isButton: true,
       variant: "default",
     },
