@@ -11,7 +11,7 @@ class HeroResource extends Resource
 {
     protected static ?string $model = Hero::class;
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-bolt';
 
     protected static ?string $navigationLabel = 'Hero';
 
