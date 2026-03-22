@@ -19,7 +19,17 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@example.com',
             'phone' => '083829933268',
-            'password' => 'admin123'
+            'password' => bcrypt('admin123'),
+        ]);
+
+        $this->call([
+            KontakSeeder::class,
+            HeroSeeder::class,
+            GallerySeeder::class,
+            PartnerSeeder::class,
+            ProdukSeeder::class,
+            BlogSeeder::class,
+            WebsiteSettingSeeder::class,
         ]);
     }
 }
