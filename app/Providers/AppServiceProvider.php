@@ -7,6 +7,8 @@ use Illuminate\Support\ServiceProvider;
 use Filament\Forms\Components\FileUpload;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 
 class AppServiceProvider extends ServiceProvider
 {

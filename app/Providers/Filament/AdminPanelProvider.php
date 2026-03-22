@@ -11,6 +11,7 @@ use App\Filament\Resources\Galleries\GalleryResource;
 use App\Filament\Resources\Partners\PartnerResource;
 use App\Filament\Resources\Produks\ProdukResource;
 use App\Filament\Resources\Blogs\BlogResource;
+use App\Filament\Resources\WebsiteSettings\WebsiteSettingResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -83,6 +84,10 @@ class AdminPanelProvider extends PanelProvider
                                 ...PartnerResource::getNavigationItems(),
                                 ...ProdukResource::getNavigationItems(),
                                 ...BlogResource::getNavigationItems(),
+                            ]),
+                        NavigationGroup::make('Pengaturan')
+                            ->items([
+                                ...WebsiteSettingResource::getNavigationItems(),
                             ]),
                     ]);
             })
