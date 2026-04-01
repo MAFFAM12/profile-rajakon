@@ -1,6 +1,7 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
 import Layout from '../Layouts/Layout';
+import DOMPurify from 'dompurify';
 
 const BlogDetail = ({ blog, related = [] }) => {
     return (
@@ -8,7 +9,7 @@ const BlogDetail = ({ blog, related = [] }) => {
             <Head title={`${blog.judul} - Rajakon`} />
 
             <main className="relative z-10 py-20 px-6">
-                <div className="max-w-3xl mx-auto">
+                <div className="max-w-7xl mx-auto">
 
                     {/* Breadcrumb */}
                     <nav className="flex items-center gap-2 text-sm text-zinc-500 mb-8">
@@ -65,7 +66,7 @@ const BlogDetail = ({ blog, related = [] }) => {
                                 prose-blockquote:border-blue-500 prose-blockquote:text-zinc-500
                                 prose-code:bg-zinc-100 prose-code:px-1 prose-code:rounded
                                 dark:prose-p:text-zinc-400 dark:prose-headings:text-white"
-                            dangerouslySetInnerHTML={{ __html: blog.konten }}
+                            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog.konten || '') }}
                         />
                     )}
 
