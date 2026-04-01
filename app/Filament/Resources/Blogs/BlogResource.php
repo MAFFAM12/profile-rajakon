@@ -149,7 +149,6 @@ class BlogResource extends Resource
                             ->html(),
                         TextEntry::make('konten')
                             ->label('Konten Lengkap')
-                            ->columnSpanFull()
                             ->formatStateUsing(fn (string $state): string => $state)
                             ->html()
                             ->columnSpanFull(),
