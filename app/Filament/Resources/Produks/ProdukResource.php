@@ -18,6 +18,7 @@ use Filament\Support\Enums\TextSize;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 
 class ProdukResource extends Resource
@@ -73,9 +74,8 @@ class ProdukResource extends Resource
                             ->label('Tampilkan di Website')
                             ->default(true),
 
-                        Forms\Components\Textarea::make('deskripsi')
+                        Forms\Components\RichEditor::make('deskripsi')
                             ->label('Deskripsi')
-                            ->rows(5)
                             ->columnSpanFull(),
                     ])
                     ->columns(2),
@@ -101,6 +101,7 @@ class ProdukResource extends Resource
                             ->label('Upload Foto (bisa lebih dari 1)')
                             ->multiple()
                             ->reorderable()
+                            ->appendFiles()
                             ->image()
                             ->disk('public')
                             ->directory('produk')
@@ -153,7 +154,7 @@ class ProdukResource extends Resource
                         TextEntry::make('deskripsi')
                             ->label('Deskripsi Produk')
                             ->columnSpanFull()
-                            ->formatStateUsing(fn(string $state): string => nl2br(e($state)))
+                            ->formatStateUsing(fn (string $state): string => $state)
                             ->html(),
                         RepeatableEntry::make('manfaat')
                             ->label('Manfaat Produk')
@@ -170,9 +171,7 @@ class ProdukResource extends Resource
                 Section::make('Galeri Produk')
                     ->schema([
                         ImageEntry::make('gambar')
-                            ->disk('public')
-                            ->width(200)
-                            ->height(150),
+                            ->disk('public'),
                         // RepeatableEntry::make('gambar')
                         //     ->label('Foto Produk')
                         //     ->schema([])

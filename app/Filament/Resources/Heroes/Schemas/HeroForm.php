@@ -34,6 +34,7 @@ class HeroForm
                     ->maxSize(51200) // 50MB
                     ->multiple()
                     ->reorderable()
+                    ->appendFiles()
                     ->downloadable()
                     ->columnSpanFull()
                     ->label('Upload Gambar (Multiple)'),
