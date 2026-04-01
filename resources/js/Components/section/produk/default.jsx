@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Section } from '../../ui/section';
 import { Link } from '@inertiajs/react';
+import DOMPurify from 'dompurify';
 
 const ProdukCard = ({ produk, index }) => {
     const isEven = index % 2 === 0;
@@ -26,9 +27,13 @@ const ProdukCard = ({ produk, index }) => {
                 </h3>
 
                 <p className="text-gray-600 dark:text-gray-400 mb-5 leading-relaxed text-base">
-                    {produk.deskripsi?.length > 220
-                        ? produk.deskripsi.slice(0, 220) + '...'
-                        : produk.deskripsi}
+                    <span
+                        dangerouslySetInnerHTML={{
+                            __html: produk?.deskripsi?.length > 220
+                                ? DOMPurify.sanitize(produk.deskripsi.slice(0, 220) + '...' || '')
+                                : DOMPurify.sanitize(produk?.deskripsi || '')
+                        }}
+                    />
                 </p>
 
                 {produk.manfaat?.length > 0 && (
@@ -51,7 +56,7 @@ const ProdukCard = ({ produk, index }) => {
                     href={`/produk/${produk.slug}`}
                     className="inline-flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-medium text-sm hover:gap-3 transition-all duration-200"
                 >
-                    Lihat produk
+                    Lihat
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />

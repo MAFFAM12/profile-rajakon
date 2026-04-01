@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import Layout from '../Layouts/Layout';
+import DOMPurify from 'dompurify';
 
 const ZoomImage = ({ src, alt }) => {
     const [zoomed, setZoomed] = useState(false);
@@ -133,7 +134,12 @@ const ProdukDetail = ({ produk }) => {
                             )}
 
                             <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed text-base">
-                                {produk.deskripsi}
+                                <span
+                                    className='prose text-[#57606a] dark:text-[#8b949e]'
+                                    dangerouslySetInnerHTML={{
+                                        __html: DOMPurify.sanitize(produk?.deskripsi || '')
+                                    }}
+                                />
                             </p>
 
                             {produk.manfaat?.length > 0 && (
