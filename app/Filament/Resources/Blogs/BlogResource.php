@@ -14,8 +14,11 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Infolists;
+use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Support\Enums\FontWeight;
+use Filament\Support\Enums\TextSize;
 
 class BlogResource extends Resource
 {
@@ -102,49 +105,49 @@ class BlogResource extends Resource
     {
         return $schema
             ->components([
-                Infolists\Components\Section::make('Informasi Artikel')
+                Section::make('Informasi Artikel')
                     ->schema([
-                        Infolists\Components\TextEntry::make('judul')
+                        TextEntry::make('judul')
                             ->label('Judul Artikel')
                             ->columnSpanFull()
-                            ->size(\Filament\Support\Enums\FontSize::Large)
-                            ->weight(\Filament\Support\Enums\FontWeight::Bold),
-                        Infolists\Components\TextEntry::make('slug')
+                            ->size(TextSize::Large)
+                            ->weight(FontWeight::Bold),
+                        TextEntry::make('slug')
                             ->label('Slug URL')
                             ->copyable()
                             ->copyMessage('Slug berhasil disalin')
                             ->copyMessageDuration(1500),
-                        Infolists\Components\TextEntry::make('kategori')
+                        TextEntry::make('kategori')
                             ->label('Kategori')
                             ->badge()
                             ->color('primary')
                             ->placeholder('Tidak ada kategori'),
-                        Infolists\Components\IconEntry::make('is_published')
+                        IconEntry::make('is_published')
                             ->label('Status Publikasi')
                             ->boolean()
                             ->trueIcon('heroicon-o-check-circle')
                             ->falseIcon('heroicon-o-clock')
                             ->trueColor('success')
                             ->falseColor('warning'),
-                        Infolists\Components\TextEntry::make('published_at')
+                        TextEntry::make('published_at')
                             ->label('Tanggal Publikasi')
                             ->dateTime('d F Y, H:i')
                             ->icon('heroicon-m-calendar-days')
                             ->placeholder('Belum dipublikasikan'),
-                        Infolists\Components\TextEntry::make('urutan')
+                        TextEntry::make('urutan')
                             ->label('Urutan Tampil')
                             ->icon('heroicon-m-bars-3'),
                     ])
                     ->columns(2),
 
-                Infolists\Components\Section::make('Ringkasan & Konten')
+                Section::make('Ringkasan & Konten')
                     ->schema([
-                        Infolists\Components\TextEntry::make('excerpt')
+                        TextEntry::make('excerpt')
                             ->label('Ringkasan Artikel')
                             ->columnSpanFull()
                             ->formatStateUsing(fn (string $state): string => nl2br(e($state)))
                             ->html(),
-                        Infolists\Components\TextEntry::make('konten')
+                        TextEntry::make('konten')
                             ->label('Konten Lengkap')
                             ->columnSpanFull()
                             ->formatStateUsing(fn (string $state): string => $state)
@@ -152,7 +155,7 @@ class BlogResource extends Resource
                             ->columnSpanFull(),
                     ]),
 
-                Infolists\Components\Section::make('Media')
+                Section::make('Media')
                     ->schema([
                         ImageEntry::make('thumbnail')
                             ->label('Thumbnail Artikel')
@@ -162,13 +165,13 @@ class BlogResource extends Resource
                     ])
                     ->collapsible(),
 
-                Infolists\Components\Section::make('Informasi Sistem')
+                Section::make('Informasi Sistem')
                     ->schema([
-                        Infolists\Components\TextEntry::make('created_at')
+                        TextEntry::make('created_at')
                             ->label('Tanggal Dibuat')
                             ->dateTime('d F Y, H:i')
                             ->icon('heroicon-m-calendar-days'),
-                        Infolists\Components\TextEntry::make('updated_at')
+                        TextEntry::make('updated_at')
                             ->label('Terakhir Diubah')
                             ->dateTime('d F Y, H:i')
                             ->icon('heroicon-m-clock'),

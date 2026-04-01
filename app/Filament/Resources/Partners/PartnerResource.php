@@ -20,7 +20,9 @@ use Filament\Actions\ViewAction;
 use Filament\Infolists;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
-
+use Filament\Schemas\Components\Section;
+use Filament\Support\Enums\TextSize;
+use Filament\Tables\Filters\TernaryFilter;
 
 class PartnerResource extends Resource
 {
@@ -89,7 +91,7 @@ class PartnerResource extends Resource
             ])
             // ->defaultSort('order')  ← HAPUS/KOMEN BARIS INI
             ->filters([
-                Tables\Filters\TernaryFilter::make('is_active')
+                TernaryFilter::make('is_active')
                     ->label('Status Tampil'),
             ])
             ->actions([
@@ -106,12 +108,12 @@ class PartnerResource extends Resource
     {
         return $schema
             ->components([
-                Infolists\Components\Section::make('Informasi Partner')
+                Section::make('Informasi Partner')
                     ->schema([
                         Infolists\Components\TextEntry::make('name')
                             ->label('Nama Partner')
                             ->columnSpanFull()
-                            ->size(\Filament\Support\Enums\FontSize::Large)
+                            ->size(TextSize::Large)
                             ->weight(\Filament\Support\Enums\FontWeight::Bold),
                         Infolists\Components\TextEntry::make('order')
                             ->label('Urutan Tampil')
@@ -126,7 +128,7 @@ class PartnerResource extends Resource
                     ])
                     ->columns(2),
 
-                Infolists\Components\Section::make('Logo Partner')
+                Section::make('Logo Partner')
                     ->schema([
                         ImageEntry::make('logo')
                             ->label('Logo Partner')
@@ -136,7 +138,7 @@ class PartnerResource extends Resource
                     ])
                     ->collapsible(),
 
-                Infolists\Components\Section::make('Informasi Sistem')
+                Section::make('Informasi Sistem')
                     ->schema([
                         Infolists\Components\TextEntry::make('created_at')
                             ->label('Tanggal Dibuat')

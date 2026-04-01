@@ -5,7 +5,10 @@ namespace App\Filament\Resources\Heroes\Schemas;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\FontWeight;
+use Filament\Support\Enums\TextSize;
 use Filament\Tables\Table;
 
 class HeroInfoList
@@ -14,21 +17,21 @@ class HeroInfoList
     {
         return $schema
             ->components([
-                \Filament\Infolists\Components\Section::make('Konten Hero')
+                Section::make('Konten Hero')
                     ->schema([
-                        \Filament\Infolists\Components\TextEntry::make('heading')
+                        TextEntry::make('heading')
                             ->label('Judul Utama')
                             ->columnSpanFull()
-                            ->size(\Filament\Support\Enums\FontSize::Large)
-                            ->weight(\Filament\Support\Enums\FontWeight::Bold),
-                        \Filament\Infolists\Components\TextEntry::make('sub_heading')
+                            ->size(TextSize::Large)
+                            ->weight(FontWeight::Bold),
+                        TextEntry::make('sub_heading')
                             ->label('Sub Judul')
                             ->columnSpanFull()
-                            ->size(\Filament\Support\Enums\FontSize::Medium),
-                        \Filament\Infolists\Components\TextEntry::make('cta_label')
+                            ->size(TextSize::Medium),
+                        TextEntry::make('cta_label')
                             ->label('Label Tombol CTA')
                             ->icon('heroicon-m-cursor-arrow-rays'),
-                        \Filament\Infolists\Components\TextEntry::make('cta_link')
+                        TextEntry::make('cta_link')
                             ->label('Link Tombol CTA')
                             ->icon('heroicon-m-link')
                             ->copyable()
@@ -37,21 +40,21 @@ class HeroInfoList
                     ])
                     ->columns(2),
 
-                \Filament\Infolists\Components\Section::make('Media & Status')
+                Section::make('Media & Status')
                     ->schema([
-                        \Filament\Infolists\Components\IconEntry::make('status')
+                        IconEntry::make('status')
                             ->label('Status Aktif')
                             ->boolean()
                             ->trueIcon('heroicon-o-check-circle')
                             ->falseIcon('heroicon-o-x-circle')
                             ->trueColor('success')
                             ->falseColor('danger'),
-                        \Filament\Infolists\Components\ImageEntry::make('hero_image')
+                        ImageEntry::make('hero_image')
                             ->label('Gambar Hero')
                             ->disk('public')
                             ->width(300)
                             ->height(200),
-                        \Filament\Infolists\Components\TextEntry::make('images_display_type')
+                        TextEntry::make('images_display_type')
                             ->label('Tipe Tampilan Gambar')
                             ->badge()
                             ->color('primary')
@@ -62,21 +65,21 @@ class HeroInfoList
                     ])
                     ->columns(3),
 
-                \Filament\Infolists\Components\Section::make('Informasi Sistem')
+                Section::make('Informasi Sistem')
                     ->schema([
-                        \Filament\Infolists\Components\TextEntry::make('creator.name')
+                        TextEntry::make('creator.name')
                             ->label('Dibuat Oleh')
                             ->icon('heroicon-m-user-plus')
                             ->placeholder('Tidak diketahui'),
-                        \Filament\Infolists\Components\TextEntry::make('updater.name')
+                        TextEntry::make('updater.name')
                             ->label('Terakhir Diubah Oleh')
                             ->icon('heroicon-m-user')
                             ->placeholder('Belum pernah diubah'),
-                        \Filament\Infolists\Components\TextEntry::make('created_at')
+                        TextEntry::make('created_at')
                             ->label('Tanggal Dibuat')
                             ->dateTime('d F Y, H:i')
                             ->icon('heroicon-m-calendar-days'),
-                        \Filament\Infolists\Components\TextEntry::make('updated_at')
+                        TextEntry::make('updated_at')
                             ->label('Terakhir Diubah')
                             ->dateTime('d F Y, H:i')
                             ->icon('heroicon-m-clock'),

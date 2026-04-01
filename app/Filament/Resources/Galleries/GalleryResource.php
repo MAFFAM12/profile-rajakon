@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Galleries;
 
+use App\Models\Gallery;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
@@ -19,6 +20,9 @@ use Illuminate\Support\Carbon;
 use Filament\Infolists;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Section;
+use Filament\Support\Enums\TextSize;
+use Filament\Tables\Filters\TernaryFilter;
 
 class GalleryResource extends Resource
 {
@@ -62,12 +66,12 @@ class GalleryResource extends Resource
     {
         return $schema
             ->components([
-                Infolists\Components\Section::make('Informasi Dokumentasi')
+                Section::make('Informasi Dokumentasi')
                     ->schema([
                         Infolists\Components\TextEntry::make('title')
                             ->label('Judul Dokumentasi')
                             ->columnSpanFull()
-                            ->size(\Filament\Support\Enums\FontSize::Large)
+                            ->size(TextSize::Large)
                             ->weight(\Filament\Support\Enums\FontWeight::Bold),
                         Infolists\Components\TextEntry::make('year')
                             ->label('Tahun')
@@ -85,7 +89,7 @@ class GalleryResource extends Resource
                     ])
                     ->columns(2),
 
-                Infolists\Components\Section::make('Deskripsi')
+                Section::make('Deskripsi')
                     ->schema([
                         Infolists\Components\TextEntry::make('description')
                             ->label('Deskripsi Dokumentasi')
@@ -95,7 +99,7 @@ class GalleryResource extends Resource
                             ->placeholder('Tidak ada deskripsi'),
                     ]),
 
-                Infolists\Components\Section::make('Gambar')
+                Section::make('Gambar')
                     ->schema([
                         ImageEntry::make('image')
                             ->label('Gambar Dokumentasi')
@@ -105,7 +109,7 @@ class GalleryResource extends Resource
                     ])
                     ->collapsible(),
 
-                Infolists\Components\Section::make('Informasi Sistem')
+                Section::make('Informasi Sistem')
                     ->schema([
                         Infolists\Components\TextEntry::make('created_at')
                             ->label('Tanggal Dibuat')
@@ -151,7 +155,7 @@ class GalleryResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\TernaryFilter::make('is_active')
+                TernaryFilter::make('is_active')
                     ->label('Status Tampil'),
             ])
             ->recordAction(EditAction::class)

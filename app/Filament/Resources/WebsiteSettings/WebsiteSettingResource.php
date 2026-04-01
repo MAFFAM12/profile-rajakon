@@ -4,6 +4,10 @@ namespace App\Filament\Resources\WebsiteSettings;
 
 use App\Models\WebsiteSetting;
 use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -21,7 +25,13 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Toggle;
 use Filament\Infolists;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
+use Filament\Support\Enums\FontWeight;
+use Filament\Support\Enums\TextSize;
 
 class WebsiteSettingResource extends Resource
 {
@@ -183,12 +193,12 @@ class WebsiteSettingResource extends Resource
                     ->label('Status'),
             ])
             ->recordActions([
-                Actions\ViewAction::make(),
-                Actions\EditAction::make(),
+                ViewAction::make(),
+                EditAction::make(),
             ])
             ->toolbarActions([
-                Actions\BulkActionGroup::make([
-                    Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -197,21 +207,21 @@ class WebsiteSettingResource extends Resource
     {
         return $schema
             ->components([
-                Infolists\Components\Section::make('Informasi Perusahaan')
+                Section::make('Informasi Perusahaan')
                     ->schema([
-                        Infolists\Components\TextEntry::make('company_name')
+                        TextEntry::make('company_name')
                             ->label('Nama Perusahaan')
                             ->columnSpanFull()
-                            ->size(\Filament\Support\Enums\FontSize::Large)
-                            ->weight(\Filament\Support\Enums\FontWeight::Bold),
+                            ->size(TextSize::Large)
+                            ->weight(FontWeight::Bold),
 
-                        Infolists\Components\TextEntry::make('company_description')
+                        TextEntry::make('company_description')
                             ->label('Deskripsi Perusahaan')
                             ->columnSpanFull()
                             ->formatStateUsing(fn (string $state): string => nl2br(e($state)))
                             ->html(),
 
-                        Infolists\Components\ImageEntry::make('logo')
+                        ImageEntry::make('logo')
                             ->label('Logo Perusahaan')
                             ->disk('public')
                             ->width(200)
@@ -219,23 +229,23 @@ class WebsiteSettingResource extends Resource
                     ])
                     ->columns(2),
 
-                Infolists\Components\Section::make('Informasi Kontak')
+                Section::make('Informasi Kontak')
                     ->schema([
-                        Infolists\Components\TextEntry::make('phone')
+                        TextEntry::make('phone')
                             ->label('Nomor Telepon')
                             ->icon('heroicon-m-phone')
                             ->copyable()
                             ->copyMessage('Nomor telepon berhasil disalin')
                             ->copyMessageDuration(1500),
 
-                        Infolists\Components\TextEntry::make('email')
+                        TextEntry::make('email')
                             ->label('Alamat Email')
                             ->icon('heroicon-m-envelope')
                             ->copyable()
                             ->copyMessage('Email berhasil disalin')
                             ->copyMessageDuration(1500),
 
-                        Infolists\Components\TextEntry::make('address')
+                        TextEntry::make('address')
                             ->label('Alamat Lengkap')
                             ->columnSpanFull()
                             ->formatStateUsing(fn (string $state): string => nl2br(e($state)))
@@ -243,21 +253,21 @@ class WebsiteSettingResource extends Resource
                     ])
                     ->columns(2),
 
-                Infolists\Components\Section::make('Media Sosial')
+                Section::make('Media Sosial')
                     ->schema([
-                        Infolists\Components\RepeatableEntry::make('social_media')
+                        RepeatableEntry::make('social_media')
                             ->label('Platform Media Sosial')
                             ->schema([
-                                Infolists\Components\TextEntry::make('platform')
+                                TextEntry::make('platform')
                                     ->label('Platform')
                                     ->badge()
                                     ->color('primary'),
-                                Infolists\Components\TextEntry::make('url')
+                                TextEntry::make('url')
                                     ->label('URL')
                                     ->copyable()
                                     ->copyMessage('URL berhasil disalin')
                                     ->copyMessageDuration(1500),
-                                Infolists\Components\TextEntry::make('username')
+                                TextEntry::make('username')
                                     ->label('Username')
                                     ->placeholder('Tidak ada username'),
                             ])
@@ -265,9 +275,9 @@ class WebsiteSettingResource extends Resource
                             ->columnSpanFull(),
                     ]),
 
-                Infolists\Components\Section::make('Status & Sistem')
+                Section::make('Status & Sistem')
                     ->schema([
-                        Infolists\Components\IconEntry::make('is_active')
+                        IconEntry::make('is_active')
                             ->label('Status Aktif')
                             ->boolean()
                             ->trueIcon('heroicon-o-check-circle')
@@ -275,12 +285,12 @@ class WebsiteSettingResource extends Resource
                             ->trueColor('success')
                             ->falseColor('danger'),
 
-                        Infolists\Components\TextEntry::make('created_at')
+                        TextEntry::make('created_at')
                             ->label('Tanggal Dibuat')
                             ->dateTime('d F Y, H:i')
                             ->icon('heroicon-m-calendar-days'),
 
-                        Infolists\Components\TextEntry::make('updated_at')
+                        TextEntry::make('updated_at')
                             ->label('Terakhir Diubah')
                             ->dateTime('d F Y, H:i')
                             ->icon('heroicon-m-clock'),

@@ -8,6 +8,7 @@ use Filament\Actions;
 use Filament\Forms;
 use Filament\Infolists;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables;
@@ -34,7 +35,7 @@ class KontakResource extends Resource
     {
         return $schema
             ->components([
-                Infolists\Components\Section::make('Informasi Kontak')
+                Section::make('Informasi Kontak')
                     ->schema([
                         Infolists\Components\TextEntry::make('id')
                             ->label('ID Kontak')
@@ -63,7 +64,7 @@ class KontakResource extends Resource
                     ])
                     ->columns(2),
 
-                Infolists\Components\Section::make('Detail Permintaan')
+                Section::make('Detail Permintaan')
                     ->schema([
                         Infolists\Components\TextEntry::make('layanan_minat')
                             ->label('Layanan yang Diminati')
@@ -93,7 +94,7 @@ class KontakResource extends Resource
                             ->html(),
                     ]),
 
-                Infolists\Components\Section::make('Informasi Sistem')
+                Section::make('Informasi Sistem')
                     ->schema([
                         Infolists\Components\TextEntry::make('created_at')
                             ->label('Tanggal Dibuat')
