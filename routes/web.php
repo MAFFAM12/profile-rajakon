@@ -7,6 +7,8 @@ use App\Http\Controllers\BlogController;
 use App\Models\Hero;
 use App\Models\Produk;
 use App\Models\Blog;
+use App\Models\Gallery;
+use App\Models\Partner;
 use App\Models\WebsiteSetting;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
@@ -19,11 +21,11 @@ Route::get('/', function () {
         ->map(function ($hero) {
             // Check if hero has images in array or hero_image field
             $hasImages = !empty($hero->images) || !empty($hero->hero_image);
-            
+
             if (!$hasImages) {
                 return null;
             }
-            
+
             // Process images array if exists
             if (!empty($hero->images) && is_array($hero->images)) {
                 $hero->images = array_map(function ($image) {
@@ -31,7 +33,7 @@ Route::get('/', function () {
                         ? $image
                         : Storage::url($image);
                 }, $hero->images);
-                
+
                 $hero->hero_image = $hero->images[0];
             } elseif (!empty($hero->hero_image)) {
                 // Process single hero_image field
@@ -39,13 +41,13 @@ Route::get('/', function () {
                     ? $hero->hero_image
                     : Storage::url($hero->hero_image);
             }
-            
+
             return $hero;
         })
         ->filter()
         ->values();
 
-    $galleries = \App\Models\Gallery::where('is_active', true)
+    $galleries = Gallery::where('is_active', true)
         ->orderBy('order')
         ->get()
         ->map(function ($item) {
@@ -57,7 +59,7 @@ Route::get('/', function () {
             ];
         });
 
-    $partners = \App\Models\Partner::where('is_active', true)
+    $partners = Partner::where('is_active', true)
         ->orderBy('order')
         ->get()
         ->map(function ($item) {
@@ -143,3 +145,27 @@ Route::get('/produk/{slug}', [ProdukController::class, 'show'])->name('produk.sh
 
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+
+Route::get('/tentang', function () {
+    // Website settings untuk footer dan informasi perusahaan
+    $websiteSettings = WebsiteSetting::where('is_active', true)
+        ->first();
+
+    $settingsData = null;
+    if ($websiteSettings) {
+        $settingsData = [
+            'id'                  => $websiteSettings->id,
+            'company_name'        => $websiteSettings->company_name,
+            'company_description' => $websiteSettings->company_description,
+            'phone'               => $websiteSettings->phone,
+            'email'               => $websiteSettings->email,
+            'address'             => $websiteSettings->address,
+            'logo'                => $websiteSettings->logo ? Storage::url($websiteSettings->logo) : null,
+            'social_media'        => $websiteSettings->social_media ?? [],
+        ];
+    }
+
+    return Inertia::render('Tentang', [
+        'websiteSettings' => $settingsData,
+    ]);
+});
