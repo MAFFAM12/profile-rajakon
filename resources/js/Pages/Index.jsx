@@ -18,7 +18,7 @@ const Index = (props) => {
 
   return (
     <Layout>
-      <Head title="Rajakon - Personal Profile" />
+      <Head title="Rajakon - Profil Perusahaan" />
 
       <AuroraBackground>
         <Hero heroes={heroes} />
