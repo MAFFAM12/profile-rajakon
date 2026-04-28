@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Section } from '../../ui/section';
 import { Link } from '@inertiajs/react';
 import DOMPurify from 'dompurify';
+import { Button } from '../../ui/button'
 
 const ProdukCard = ({ produk, index }) => {
     const isEven = index % 2 === 0;
@@ -108,6 +109,14 @@ const Produk = ({ produks = [] }) => {
                             <ProdukCard key={produk.id} produk={produk} index={index} />
                         ))
                     )}
+
+                    <div className='flex justify-center'>
+                        <Button asChild>
+                            <Link href={'/katalog'}>
+                                Produk & Jasa Lainnya
+                            </Link>
+                        </Button>
+                    </div>
                 </div>
             </div>
         </Section>
