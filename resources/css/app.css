@@ -311,10 +311,6 @@
   align-items: center;
 }
 
-.logo-loop-track:hover {
-  animation-play-state: paused;
-}
-
 .logo-loop-item {
   display: flex;
   align-items: center;
@@ -324,6 +320,5 @@
 }
 
 .logo-loop-item:hover {
-  transform: scale(1.1);
   filter: drop-shadow(0 10px 15px -3px rgba(79, 39, 245, 0.3));
 }

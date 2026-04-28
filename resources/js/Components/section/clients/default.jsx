@@ -4,6 +4,10 @@ import { Section } from '../../ui/section';
 const Clients = ({ partners = [] }) => {
 	// Duplicate partners for seamless loop
 	const displayPartners = [...partners, ...partners];
+	
+	// Calculate animation duration based on number of partners
+	// Base speed: 3s per logo for smooth animation
+	const animationDuration = Math.max(10, partners.length * 3);
 
 	return (
 		<Section id="klien">
@@ -23,11 +27,14 @@ const Clients = ({ partners = [] }) => {
 						<p className="text-center text-gray-400">Belum ada partner yang ditambahkan.</p>
 					) : (
 						<div className="logo-loop-container animate-appear opacity-0 duration-300">
-							<div className="logo-loop-track">
+							<div 
+								className="logo-loop-track"
+								style={{ animationDuration: `${animationDuration}s` }}
+							>
 								{displayPartners.map((partner, index) => (
 									<div
 										key={`${partner.id}-${index}`}
-										className="logo-loop-item group relative flex items-center justify-center p-6 md:p-8 rounded-2xl bg-white border border-gray-100 hover:border-indigo-200 h-24 md:h-28 w-32 md:w-40"
+										className="logo-loop-item group relative flex items-center justify-center p-6 md:p-8 rounded-2xl h-24 md:h-28 w-32 md:w-40"
 									>
 										<img
 											src={partner.logo}
