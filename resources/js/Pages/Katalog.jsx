@@ -75,6 +75,26 @@ const Katalog = (props) => {
                             ))}
                         </div>
                     )}
+
+                    {/* Pagination */}
+                    {links && links.length > 3 && (
+                        <div className="flex justify-center items-center gap-2 flex-wrap">
+                            {links.map((link, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => link.url && router.get(link.url)}
+                                    disabled={!link.url}
+                                    className={`px-4 py-2 rounded-lg text-sm transition-all ${link.active
+                                        ? 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-semibold'
+                                        : link.url
+                                            ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200'
+                                            : 'opacity-30 cursor-not-allowed bg-zinc-100 dark:bg-zinc-800 text-zinc-400'
+                                        }`}
+                                    dangerouslySetInnerHTML={{ __html: link.label }}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
             </main>
         </Layout>
