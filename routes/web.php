@@ -143,6 +143,7 @@ Route::prefix('admin')->group(function () {
     Route::delete('/gallery/{id}', [GalleryController::class, 'destroy'])->name('admin.gallery.destroy');
 });
 
+Route::get('/katalog', [ProdukController::class, 'index'])->name('produk.index');
 Route::get('/produk/{slug}', [ProdukController::class, 'show'])->name('produk.show');
 
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
@@ -169,36 +170,5 @@ Route::get('/tentang', function () {
 
     return Inertia::render('Tentang', [
         'websiteSettings' => $settingsData,
-    ]);
-});
-
-Route::get('/katalog', function (Request $request) {
-
-    $kategori = $request->query('kategori');
-
-
-    $query = Produk::where('is_active', true)
-        ->orderBy('urutan');
-
-    if ($kategori) {
-        $query->where('badge', ucfirst($kategori));
-    }
-
-    $produks = $query->paginate(9)->through(function ($item) {
-        return [
-            'id'        => $item->id,
-            'nama'      => $item->nama,
-            'badge'     => $item->badge,
-            'deskripsi' => $item->deskripsi,
-            'manfaat'   => $item->manfaat,
-            'harga'     => $item->harga,
-            'gambar'    => $item->gambar,
-            'slug'      => $item->slug,
-        ];
-    });
-
-    return Inertia::render('Katalog', [
-        'produks' => $produks,
-        'aktifKategori' => $kategori,
     ]);
 });
