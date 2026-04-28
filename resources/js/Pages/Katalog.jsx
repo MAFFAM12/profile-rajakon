@@ -107,7 +107,7 @@ const ProdukCard = ({ produk }) => (
             <div className="aspect-[16/9] overflow-hidden bg-zinc-100 dark:bg-zinc-800">
                 {produk.gambar.length > 0 ? (
                     <img
-                        src={produk.gambar[0]}
+                        src={'/storage/'.produk.gambar[0]}
                         alt={produk.nama}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
