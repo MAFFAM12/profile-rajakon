@@ -119,7 +119,7 @@ const ProdukDetail = ({ produk }) => {
 
                         {/* Detail */}
                         <div className="flex-1">
-                            <span className="inline-block border border-red-500 text-red-500 text-xs font-semibold px-3 py-1 rounded-full mb-4 tracking-wide uppercase">
+                            <span className="inline-block border border-blue-500 text-blue-500 text-xs font-semibold px-3 py-1 rounded-full mb-4 tracking-wide uppercase">
                                 {produk.badge ?? 'Produk'}
                             </span>
 
