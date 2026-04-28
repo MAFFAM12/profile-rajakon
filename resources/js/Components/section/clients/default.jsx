@@ -39,7 +39,7 @@ const Clients = ({ partners = [] }) => {
 										<img
 											src={partner.logo}
 											alt={partner.name}
-											className="h-14 md:h-20 w-auto object-contain grayscale group-hover:grayscale-0"
+											className="h-14 md:h-20 w-auto object-contain cursor-pointer transition duration-[250ms] ease-in grayscale group-hover:grayscale-0"
 										/>
 										<div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-500/0 via-indigo-500/5 to-purple-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 									</div>
