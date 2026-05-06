@@ -1,23 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
 import { Section } from '../../ui/section';
+import { WhenVisible } from '@inertiajs/react';
+import { Button } from '../../ui/button';
 
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 10;
+const appUrl = import.meta.env.VITE_APP_URL || 'http://localhost:8000';
 
-const Gallery = ({ galleries = [] }) => {
-	const [currentPage, setCurrentPage] = useState(1);
+const Gallery = () => {
+	const [page, setPage] = useState(1);
+	const [results, setResults] = useState([]);
+	const [totalPage, setTotalPage] = useState(0);
 	const [selectedIndex, setSelectedIndex] = useState(null);
-
-	const totalPages = Math.ceil(galleries.length / ITEMS_PER_PAGE);
-	const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-	const currentGalleries = galleries.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-
-	const goToPage = (page) => {
-		if (page >= 1 && page <= totalPages) {
-			setCurrentPage(page);
-			window.scrollTo({ top: 0, behavior: 'smooth' });
-		}
-	};
 
 	const showPrevImage = () => {
 		if (selectedIndex > 0) setSelectedIndex(selectedIndex - 1);
@@ -47,6 +41,50 @@ const Gallery = ({ galleries = [] }) => {
 		};
 	}, [selectedIndex]);
 
+	const getList = async () => {
+		try {
+			let response = await axios.get(`${appUrl}/api/gallery`, {
+				headers: {
+					'Content-Type': 'application/json'
+				},
+			})
+
+			const { data, status } = response;
+
+			if (data.success && status === 200) {
+				setResults(data.results.data);
+				setTotalPage(data.results.last_page);
+			}
+			console.log(response);
+		} catch (error) {
+			console.error(error.message);
+		}
+	}
+
+	const loadMore = async () => {
+		try {
+			let response = await axios.get(`${appUrl}/api/gallery`, {
+				headers: {
+					'Content-Type': 'application/json'
+				},
+			})
+
+			const { data, status } = response;
+
+			if (data.success && status === 200) {
+				setResults([...results, ...data.results.data]);
+				setPage(page + 1);
+			}
+			console.log(response);
+		} catch (error) {
+			console.error(error.message);
+		}
+	}
+
+	useEffect(() => {
+		getList();
+	}, [])
+
 	return (
 		<Section id="dokumentasi">
 			<div className="max-w-container mx-auto flex flex-col items-center gap-6 sm:gap-20">
@@ -63,76 +101,56 @@ const Gallery = ({ galleries = [] }) => {
 					</div>
 
 					{/* Gallery Grid */}
-					{galleries.length === 0 ? (
-						<p className="text-center text-gray-400">Belum ada dokumentasi yang ditambahkan.</p>
+					{results.length === 0 ? (
+						<p className="text-center text-gray-400 p-4 bg-gray-200 rounded-xl">Belum ada dokumentasi yang ditambahkan.</p>
 					) : (
-						<div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4 animate-appear opacity-0 duration-300">
-							{currentGalleries.map((item, index) => (
-								<div
-									key={item.id}
-									className="break-inside-avoid cursor-pointer overflow-hidden rounded-xl relative group"
-									onClick={() => setSelectedIndex(startIndex + index)}
-								>
-									<img
-										className="w-full h-auto object-cover rounded-xl bg-gray-100 group-hover:scale-105 transition-transform duration-500"
-										src={item.image}
-										alt={item.title ?? 'Gallery'}
-									/>
+						<WhenVisible data={["results"]} fallback={() => (
+							<div className='text-center'>
+								<p>Loading...</p>
+							</div>
+						)}>
+							<div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4 animate-appear opacity-0 duration-300">
+								{results.map((item, index) => (
+									<div
+										key={item.id}
+										className="break-inside-avoid cursor-pointer overflow-hidden rounded-xl relative group animate-appear"
+										onClick={() => setSelectedIndex(startIndex + index)}
+									>
+										<img
+											className="w-full h-auto object-cover rounded-xl bg-gray-100 group-hover:scale-105 transition-transform duration-500"
+											src={item.image}
+											alt={item.title ?? 'Gallery'}
+										/>
 
-									{/* Hover Overlay dengan Judul */}
-									{item.title && (
-										<div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/70 via-black/20 to-transparent 
-										opacity-0 group-hover:opacity-100 transition-all duration-300 
-										flex flex-col justify-end p-4">
-											<div className="translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-												{item.year && (
-													<span className="text-white/60 text-xs font-medium tracking-widest uppercase mb-1 block">
-														{item.year}
-													</span>
-												)}
-												<p className="text-white font-semibold text-sm leading-snug drop-shadow">
-													{item.title}
-												</p>
+										{/* Hover Overlay dengan Judul */}
+										{item.title && (
+											<div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/70 via-black/20 to-transparent 
+											opacity-0 group-hover:opacity-100 transition-all duration-300 
+											flex flex-col justify-end p-4">
+												<div className="translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+													{item.year && (
+														<span className="text-white/60 text-xs font-medium tracking-widest uppercase mb-1 block">
+															{item.year}
+														</span>
+													)}
+													<p className="text-white font-semibold text-sm leading-snug drop-shadow">
+														{item.title}
+													</p>
+												</div>
 											</div>
-										</div>
-									)}
-								</div>
-							))}
-						</div>
-					)}
+										)}
+									</div>
+								))}
+							</div>
 
-					{/* Pagination */}
-					{totalPages > 1 && (
-						<div className="flex justify-center items-center mt-12 gap-2">
-							<button
-								onClick={() => goToPage(currentPage - 1)}
-								disabled={currentPage === 1}
-								className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-300 transition"
-							>
-								Prev
-							</button>
-
-							{Array.from({ length: totalPages }, (_, i) => (
-								<button
-									key={i}
-									onClick={() => goToPage(i + 1)}
-									className={`px-4 py-2 rounded-lg transition ${currentPage === i + 1
-										? 'bg-blue-600 text-white'
-										: 'bg-gray-100 hover:bg-gray-200'
-										}`}
-								>
-									{i + 1}
-								</button>
-							))}
-
-							<button
-								onClick={() => goToPage(currentPage + 1)}
-								disabled={currentPage === totalPages}
-								className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-300 transition"
-							>
-								Next
-							</button>
-						</div>
+							{
+								page < totalPage ? (
+									<div className="flex items-center justify-center mt-8">
+										<Button onClick={loadMore}>Lihat Lainnya</Button>
+									</div>
+								) : null
+							}
+						</WhenVisible>
 					)}
 				</div>
 
