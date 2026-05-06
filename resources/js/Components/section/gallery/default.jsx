@@ -63,7 +63,7 @@ const Gallery = () => {
 
 	const loadMore = async () => {
 		try {
-			let response = await axios.get(`${appUrl}/api/gallery`, {
+			let response = await axios.get(`${appUrl}/api/gallery?page=${page + 1}`, {
 				headers: {
 					'Content-Type': 'application/json'
 				},
