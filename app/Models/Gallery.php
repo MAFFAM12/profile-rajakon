@@ -2,15 +2,21 @@
 
 namespace App\Models;
 
+use App\Traits\DeletesUploadedFile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Gallery extends Model
 {
-    use HasFactory;
+    use HasFactory, DeletesUploadedFile;
 
     protected $fillable = [
-        'image', 'title', 'description', 'year', 'order', 'is_active'
+        'image',
+        'title',
+        'description',
+        'year',
+        'order',
+        'is_active'
     ];
 
     protected $casts = [
@@ -18,4 +24,9 @@ class Gallery extends Model
         'year' => 'integer',
         'order' => 'integer',
     ];
+
+    protected function uploadAttributes(): array
+    {
+        return ['image'];
+    }
 }
