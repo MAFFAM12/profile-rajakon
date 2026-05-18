@@ -135,6 +135,7 @@ export default function Hero({ heroes, className }) {
 						heroes?.map((item, index) => (
 							<SwiperSlide key={index}>
 								<div className="flex flex-col items-start md:items-center gap-6 text-center sm:gap-12">
+									{renderImages(item)}
 									<h1 className="text-left md:text-center animate-appear from-foreground to-foreground dark:to-muted-foreground relative z-10 inline-block bg-linear-to-r bg-clip-text text-4xl leading-tight font-semibold text-balance text-transparent drop-shadow-2xl sm:text-6xl sm:leading-tight md:text-8xl md:leading-tight">
 										{item.heading}
 									</h1>
@@ -152,7 +153,6 @@ export default function Hero({ heroes, className }) {
 											</a>
 										</Button>
 									</div>
-									{renderImages(item)}
 								</div>
 							</SwiperSlide>
 						))
