@@ -41,6 +41,6 @@ trait DeletesUploadedFile
      */
     protected function uploadDisk(): string
     {
-        return 'public_upload'; // default disk
+        return 'public'; // default disk
     }
 }
