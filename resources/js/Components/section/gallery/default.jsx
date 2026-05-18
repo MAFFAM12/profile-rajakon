@@ -55,7 +55,6 @@ const Gallery = () => {
 				setResults(data.results.data);
 				setTotalPage(data.results.last_page);
 			}
-			console.log(response);
 		} catch (error) {
 			console.error(error.message);
 		}
