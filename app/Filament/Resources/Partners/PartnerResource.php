@@ -23,6 +23,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Support\Enums\TextSize;
 use Filament\Tables\Filters\TernaryFilter;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class PartnerResource extends Resource
 {
@@ -49,7 +50,10 @@ class PartnerResource extends Resource
                     ->disk('public')
                     ->directory('partners')
                     ->imageEditor()
-                    ->maxSize(2048),
+                    ->maxSize(2048)
+                    ->saveUploadedFileUsing(function (TemporaryUploadedFile $file): string {
+                        return (new Partner())->uploadFile($file, 'partner-logos');
+                    }),
                 TextInput::make('order')
                     ->label('Urutan')
                     ->numeric()

@@ -23,6 +23,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Support\Enums\TextSize;
 use Filament\Tables\Filters\TernaryFilter;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class GalleryResource extends Resource
 {
@@ -46,7 +47,10 @@ class GalleryResource extends Resource
                     ->directory('gallery')
                     ->preserveFilenames()
                     ->imageEditor()
-                    ->maxSize(2048),
+                    ->maxSize(2048)
+                    ->saveUploadedFileUsing(function (TemporaryUploadedFile $file): string {
+                        return (new Gallery())->uploadFile($file, 'galleries');
+                    }),
                 TextInput::make('title')
                     ->label('Judul')
                     ->required()

@@ -32,6 +32,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\TextSize;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class WebsiteSettingResource extends Resource
 {
@@ -63,7 +64,10 @@ class WebsiteSettingResource extends Resource
                             ->disk('public')
                             ->directory('logos')
                             ->imageEditor()
-                            ->maxSize(2048),
+                            ->maxSize(2048)
+                            ->saveUploadedFileUsing(function (TemporaryUploadedFile $file): string {
+                                return (new WebsiteSetting())->uploadFile($file, 'logo');
+                            }),
                     ])
                     ->columns(2),
 
@@ -218,7 +222,7 @@ class WebsiteSettingResource extends Resource
                         TextEntry::make('company_description')
                             ->label('Deskripsi Perusahaan')
                             ->columnSpanFull()
-                            ->formatStateUsing(fn (string $state): string => nl2br(e($state)))
+                            ->formatStateUsing(fn(string $state): string => nl2br(e($state)))
                             ->html(),
 
                         ImageEntry::make('logo')
@@ -248,7 +252,7 @@ class WebsiteSettingResource extends Resource
                         TextEntry::make('address')
                             ->label('Alamat Lengkap')
                             ->columnSpanFull()
-                            ->formatStateUsing(fn (string $state): string => nl2br(e($state)))
+                            ->formatStateUsing(fn(string $state): string => nl2br(e($state)))
                             ->html(),
                     ])
                     ->columns(2),

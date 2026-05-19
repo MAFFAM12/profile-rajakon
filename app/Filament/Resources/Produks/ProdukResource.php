@@ -20,6 +20,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class ProdukResource extends Resource
 {
@@ -106,7 +107,10 @@ class ProdukResource extends Resource
                             ->disk('public')
                             ->directory('produk')
                             ->columnSpanFull()
-                            ->helperText('Foto pertama akan menjadi thumbnail di halaman utama'),
+                            ->helperText('Foto pertama akan menjadi thumbnail di halaman utama')
+                            ->saveUploadedFileUsing(function (TemporaryUploadedFile $file): string {
+                                return (new Produk())->uploadFile($file, 'product-photos');
+                            }),
                     ]),
             ]);
     }
@@ -154,7 +158,7 @@ class ProdukResource extends Resource
                         TextEntry::make('deskripsi')
                             ->label('Deskripsi Produk')
                             ->columnSpanFull()
-                            ->formatStateUsing(fn (string $state): string => $state)
+                            ->formatStateUsing(fn(string $state): string => $state)
                             ->html(),
                         RepeatableEntry::make('manfaat')
                             ->label('Manfaat Produk')

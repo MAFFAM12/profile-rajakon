@@ -2,12 +2,14 @@
 
 namespace App\Filament\Resources\Heroes\Schemas;
 
+use App\Models\Hero;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class HeroForm
 {
@@ -37,7 +39,10 @@ class HeroForm
                     ->appendFiles()
                     ->downloadable()
                     ->columnSpanFull()
-                    ->label('Upload Gambar (Multiple)'),
+                    ->label('Upload Gambar (Multiple)')
+                    ->saveUploadedFileUsing(function (TemporaryUploadedFile $file): string {
+                        return (new Hero())->uploadFile($file, 'hero-images');
+                    }),
                 Radio::make('images_display_type')
                     ->label('Tipe Tampilan Gambar Multiple')
                     ->options([

@@ -19,6 +19,7 @@ use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\TextSize;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class BlogResource extends Resource
 {
@@ -88,7 +89,10 @@ class BlogResource extends Resource
                             ->disk('public')
                             ->directory('blog')
                             ->columnSpanFull()
-                            ->helperText('Gambar utama artikel yang ditampilkan di card'),
+                            ->helperText('Gambar utama artikel yang ditampilkan di card')
+                            ->saveUploadedFileUsing(function (TemporaryUploadedFile $file): string {
+                                return (new Blog())->uploadFile($file, 'blog-thumbnails');
+                            }),
                     ]),
 
                 Section::make('Konten Artikel')
@@ -145,11 +149,11 @@ class BlogResource extends Resource
                         TextEntry::make('excerpt')
                             ->label('Ringkasan Artikel')
                             ->columnSpanFull()
-                            ->formatStateUsing(fn (string $state): string => nl2br(e($state)))
+                            ->formatStateUsing(fn(string $state): string => nl2br(e($state)))
                             ->html(),
                         TextEntry::make('konten')
                             ->label('Konten Lengkap')
-                            ->formatStateUsing(fn (string $state): string => $state)
+                            ->formatStateUsing(fn(string $state): string => $state)
                             ->html()
                             ->columnSpanFull(),
                     ]),
