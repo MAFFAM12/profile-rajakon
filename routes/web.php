@@ -4,6 +4,7 @@ use App\Http\Controllers\KontakController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\BlogController;
+use App\Jobs\ConvertImages;
 use App\Models\Hero;
 use App\Models\Produk;
 use App\Models\Blog;
@@ -171,4 +172,8 @@ Route::get('/tentang', function () {
     return Inertia::render('Tentang', [
         'websiteSettings' => $settingsData,
     ]);
+});
+
+Route::get('/run-convert-image', function () {
+    ConvertImages::dispatch();
 });
