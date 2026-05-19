@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\DeletesUploadedFile;
+use App\Traits\FileUploadTrait;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Hero extends Model
 {
-    use HasFactory, HasUuids, DeletesUploadedFile;
+    use HasFactory, HasUuids, DeletesUploadedFile, FileUploadTrait;
 
     protected $fillable = [
         'heading',
@@ -58,8 +59,8 @@ class Hero extends Model
         });
     }
 
-    protected function uploadAttributes(): array
+    public function uploadAttributes(): array
     {
-        return ['hero_image'];
+        return ['images'];
     }
 }

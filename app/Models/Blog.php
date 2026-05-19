@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use App\Traits\DeletesUploadedFile;
+use App\Traits\FileUploadTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Blog extends Model
 {
-    use DeletesUploadedFile;
+    use DeletesUploadedFile, FileUploadTrait;
 
     protected $fillable = [
         'judul',
@@ -26,7 +27,7 @@ class Blog extends Model
         'published_at' => 'datetime',
     ];
 
-    protected function uploadAttributes(): array
+    public function uploadAttributes(): array
     {
         return ['thumbnail'];
     }

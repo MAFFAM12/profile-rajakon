@@ -10,7 +10,7 @@ class Testimoni extends Model
 {
     use HasUuids, DeletesUploadedFile;
 
-    protected function uploadAttributes(): array
+    public function uploadAttributes(): array
     {
         return ['video'];
     }

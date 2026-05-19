@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Traits\DeletesUploadedFile;
+use App\Traits\FileUploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Produk extends Model
 {
-    use DeletesUploadedFile;
+    use DeletesUploadedFile, FileUploadTrait;
     
     protected $fillable = [
         'nama', 'badge', 'deskripsi', 'manfaat',
@@ -28,7 +29,7 @@ class Produk extends Model
             : null;
     }
 
-    protected function uploadAttributes(): array
+    public function uploadAttributes(): array
     {
         return ['gambar'];
     }

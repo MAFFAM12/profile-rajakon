@@ -31,7 +31,7 @@ trait DeletesUploadedFile
     /**
      * Override in model to define which attributes are file paths.
      */
-    protected function uploadAttributes(): array
+    public function uploadAttributes(): array
     {
         return []; // default
     }
