@@ -69,7 +69,7 @@ class ProdukResource extends Resource
                         Forms\Components\TextInput::make('urutan')
                             ->label('Urutan Tampil')
                             ->numeric()
-                            ->default(0),
+                            ->default(fn(): int => Produk::max('urutan') + 1),
 
                         Forms\Components\Toggle::make('is_active')
                             ->label('Tampilkan di Website')
@@ -210,6 +210,12 @@ class ProdukResource extends Resource
                     ->getStateUsing(fn($record) => $record->gambar[0] ?? null)
                     ->disk('public'),
 
+                Tables\Columns\TextColumn::make('badge')
+                    ->label('Label Badge')
+                    ->searchable()
+                    ->sortable()
+                    ->badge(),
+
                 Tables\Columns\TextColumn::make('nama')
                     ->label('Nama Produk')
                     ->searchable()
@@ -220,6 +226,10 @@ class ProdukResource extends Resource
                     ->formatStateUsing(fn($state) => $state
                         ? 'Rp ' . number_format($state, 0, ',', '.')
                         : '-')
+                    ->sortable(),
+
+                Tables\Columns\TextInputColumn::make('urutan')
+                    ->label('Urutan')
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('is_active')
@@ -249,7 +259,7 @@ class ProdukResource extends Resource
                     Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('urutan');
+            ->defaultSort('urutan', 'asc');
     }
 
     public static function getPages(): array
