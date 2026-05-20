@@ -6,6 +6,32 @@ import { FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
 const DocumentationDetail = ({ title, year, galleries }) => {
     const [selectedIndex, setSelectedIndex] = useState(null);
 
+    // Guard clause for empty galleries
+    if (!galleries || galleries.length === 0) {
+        return (
+            <Layout>
+                <main className="relative py-8 px-6">
+                    <div className="max-w-7xl mx-auto w-full">
+                        <div className="text-center py-16">
+                            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                                Dokumentasi Tidak Ditemukan
+                            </h2>
+                            <p className="text-gray-600 mb-8">
+                                Maaf, dokumentasi untuk "{title}" tahun {year} tidak tersedia.
+                            </p>
+                            <a
+                                href="/dokumentasi"
+                                className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                            >
+                                Kembali ke Dokumentasi
+                            </a>
+                        </div>
+                    </div>
+                </main>
+            </Layout>
+        );
+    }
+
     const showPrevImage = () => {
         if (selectedIndex > 0) setSelectedIndex(selectedIndex - 1);
     };
@@ -79,65 +105,67 @@ const DocumentationDetail = ({ title, year, galleries }) => {
                             onClick={closePreview}
                         >
                             <div
-                                className="relative flex flex-col items-center justify-center px-16 max-w-5xl w-full"
+                                className="relative w-full h-full flex flex-col items-center justify-center px-4 sm:px-8 md:px-16"
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                {/* Close */}
+                                {/* Close Button - Top Right */}
                                 <button
                                     onClick={closePreview}
-                                    className="text-white/70 hover:text-white text-2xl hover:scale-110 transition"
+                                    className="absolute top-4 sm:top-6 right-4 sm:right-6 text-white/70 hover:text-white text-2xl hover:scale-110 transition z-10"
                                 >
                                     <FaTimes />
                                 </button>
 
-                                {/* Previous */}
+                                {/* Previous Button - Left */}
                                 <button
                                     onClick={showPrevImage}
                                     disabled={selectedIndex === 0}
-                                    className="absolute left-0 text-white/70 hover:text-white text-3xl hover:scale-110 disabled:opacity-20 transition"
+                                    className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 text-white/70 hover:text-white text-3xl hover:scale-110 disabled:opacity-20 transition z-10"
                                 >
                                     <FaChevronLeft />
                                 </button>
 
-                                {/* Image */}
-                                <img
-                                    src={galleries[selectedIndex].image}
-                                    alt={galleries[selectedIndex].title ?? ''}
-                                    className="max-h-[78vh] max-w-[90vw] rounded-xl shadow-2xl object-contain mt-4"
-                                />
+                                {/* Image Container */}
+                                <div className="flex flex-col items-center justify-center max-w-5xl w-full">
+                                    <img
+                                        src={galleries[selectedIndex].image}
+                                        alt={galleries[selectedIndex].title ?? ''}
+                                        className="max-h-[70vh] sm:max-h-[75vh] md:max-h-[78vh] max-w-[95vw] sm:max-w-[90vw] rounded-xl shadow-2xl object-contain"
+                                    />
 
-                                {/* Title & Meta di bawah gambar */}
-                                <div className="mt-5 text-center">
-                                    {galleries[selectedIndex].title ? (
-                                        <>
-                                            <p className="text-white font-semibold text-lg tracking-wide">
-                                                {galleries[selectedIndex].title}
-                                            </p>
-                                            {galleries[selectedIndex].year && (
-                                                <p className="text-white/40 text-sm mt-1 tracking-widest uppercase">
-                                                    {galleries[selectedIndex].year}
+                                    {/* Title & Meta */}
+                                    <div className="mt-4 sm:mt-5 text-center px-4">
+                                        {galleries[selectedIndex].title ? (
+                                            <>
+                                                <p className="text-white font-semibold text-base sm:text-lg md:text-xl tracking-wide">
+                                                    {galleries[selectedIndex].title}
                                                 </p>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <p className="text-white/40 text-sm tracking-widest">
-                                            {selectedIndex + 1} / {galleries.length}
-                                        </p>
-                                    )}
+                                                {galleries[selectedIndex].year && (
+                                                    <p className="text-white/40 text-xs sm:text-sm mt-1 tracking-widest uppercase">
+                                                        {galleries[selectedIndex].year}
+                                                    </p>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <p className="text-white/40 text-xs sm:text-sm tracking-widest">
+                                                {selectedIndex + 1} / {galleries.length}
+                                            </p>
+                                        )}
 
-                                    {/* Counter */}
-                                    {galleries[selectedIndex].title && (
-                                        <p className="text-white/30 text-xs mt-2">
-                                            {selectedIndex + 1} / {galleries.length}
-                                        </p>
-                                    )}
+                                        {/* Counter */}
+                                        {galleries[selectedIndex].title && (
+                                            <p className="text-white/30 text-xs mt-2">
+                                                {selectedIndex + 1} / {galleries.length}
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
 
-                                {/* Next */}
+                                {/* Next Button - Right */}
                                 <button
                                     onClick={showNextImage}
                                     disabled={selectedIndex === galleries.length - 1}
-                                    className="absolute right-0 text-white/70 hover:text-white text-3xl hover:scale-110 disabled:opacity-20 transition"
+                                    className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 text-white/70 hover:text-white text-3xl hover:scale-110 disabled:opacity-20 transition z-10"
                                 >
                                     <FaChevronRight />
                                 </button>
