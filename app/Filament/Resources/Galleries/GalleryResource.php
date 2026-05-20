@@ -24,6 +24,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Support\Enums\TextSize;
 use Filament\Tables\Filters\TernaryFilter;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Illuminate\Support\Str;
 
 class GalleryResource extends Resource
 {
