@@ -118,7 +118,7 @@ function About({ className }) {
                                 >
                                     <CardHoverEffect hoveredIndex={hoveredIndex} index={3} />
                                     <img
-                                        src="https://rajakon.com/public/dokumentasi/1644304207_IMG_20211025_101910877.jpg"
+                                        src="/assets/img/about-rajakon.webp"
                                         alt="Karyawan PT. Rajakon Teknik sedang melakukan thermovisi pada sebuah panel saat pelaksanaan assessment kelistrikan kantor cabang dan pusat Bank BJB seluruh indonesia"
                                         className='h-full w-full animate-appear opacity-0 delay-700 rounded-3xl shadow-lg relative z-20'
                                     />
