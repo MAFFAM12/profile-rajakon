@@ -7,11 +7,13 @@ const Layout = ({ children }) => {
         <div className='font-jakarta'>
             <Navbar
                 mobileLinks={[
-                    { text: "Tentang", href: "#tentang" },
-                    { text: "Layanan", href: "#layanan" },
-                    { text: "Partners", href: "#partners" },
-                    { text: "Gallery", href: "#gallery" },
-                    { text: "Kontak", href: "#kontak" },
+                    { text: "Tentang", href: "/#tentang" },
+                    { text: "Layanan", href: "/#layanan" },
+                    { text: "Klien", href: "/#klien" },
+                    { text: "Produk", href: "/#produk" },
+                    { text: "Blog", href: "/blog" },
+                    { text: "Dokumentasi", href: "/#dokumentasi" },
+                    { text: "Kontak", href: "/#kontak" },
                 ]}
             />
             {children}
