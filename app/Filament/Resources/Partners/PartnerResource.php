@@ -22,6 +22,7 @@ use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Support\Enums\TextSize;
+use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Filters\TernaryFilter;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
@@ -78,7 +79,7 @@ class PartnerResource extends Resource
                     ->label('Nama Partner')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('order')
+                TextInputColumn::make('order')
                     ->label('Urutan')
                     ->sortable(),
                 IconColumn::make('is_active')
