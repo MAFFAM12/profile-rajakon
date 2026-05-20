@@ -154,12 +154,14 @@ const Gallery = ({ galleries }) => {
 							</div>
 						)}>
 							<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 space-y-4 animate-appear opacity-0 duration-300">
-								{results.map((item, index) => (
-									<a
-										key={item.id}
-										href={`/dokumentasi/${item.title}/${item.year}`}
-										className="relative animate-appear cursor-pointer rounded-xl group overflow-hidden h-fit w-full"
-									>
+								{results.map((item, index) => {
+									const slug = `${item.title}-${item.year}`.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+									return (
+										<a
+											key={item.id}
+											href={`/dokumentasi/${slug}`}
+											className="relative animate-appear cursor-pointer rounded-xl group overflow-hidden h-fit w-full"
+										>
 										<div
 											style={{
 												backgroundImage: `url('${item.image}')`
@@ -187,7 +189,8 @@ const Gallery = ({ galleries }) => {
 											</div>
 										)}
 									</a>
-								))}
+								);
+								})}
 							</div>
 
 							{

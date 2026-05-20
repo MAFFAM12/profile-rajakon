@@ -55,7 +55,7 @@ Route::get('/', function () {
             ->from('galleries')
             ->groupBy('title', 'year');
     })
-        ->orderBy('year', 'asc')
+        ->orderBy('year', 'desc')
         ->get();
 
     $partners = Partner::where('is_active', true)
@@ -165,9 +165,22 @@ Route::get('/tentang', function () {
     ]);
 });
 
-Route::get('/dokumentasi/{title}/{year}', function ($title, $year) {
-    $galleries = Gallery::whereLike('title', "%$title%")
-        ->where('year', $year)
+Route::get('/dokumentasi/{slug}', function ($slug) {
+    // Find a gallery with this slug to get title and year
+    $gallery = Gallery::where('is_active', true)
+        ->get()
+        ->first(function ($item) use ($slug) {
+            $itemSlug = Str::slug($item->title . '-' . $item->year);
+            return $itemSlug === $slug;
+        });
+
+    if (!$gallery) {
+        abort(404, 'Dokumentasi tidak ditemukan');
+    }
+
+    // Get all galleries with the same title and year
+    $galleries = Gallery::where('title', $gallery->title)
+        ->where('year', $gallery->year)
         ->where('is_active', true)
         ->get()
         ->map(function ($item) {
@@ -180,8 +193,8 @@ Route::get('/dokumentasi/{title}/{year}', function ($title, $year) {
         });
 
     return Inertia::render('DocumentationDetail', [
-        'title' => $title,
-        'year' => $year,
+        'title' => $gallery->title,
+        'year' => $gallery->year,
         'galleries' => $galleries
     ]);
 });
