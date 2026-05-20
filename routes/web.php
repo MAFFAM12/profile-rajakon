@@ -70,7 +70,7 @@ Route::get('/', function () {
         });
 
     $produks = Produk::where('is_active', true)
-        ->orderBy('urutan')
+        ->orderBy('urutan', 'asc')
         ->limit(5)
         ->get()
         ->map(function ($item) {
