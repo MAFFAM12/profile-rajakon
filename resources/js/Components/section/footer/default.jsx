@@ -99,8 +99,9 @@ const Footer = ({ websiteSettings }) => {
                         <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
                         <ul className="space-y-2">
                             {quickLinks.map((link) => (
-                                <li key={link.name}>
+                                <li key={link.name} className='cursor-pointer'>
                                     <a
+                                        href={link.href}
                                         className="text-gray-400 hover:text-white transition-colors duration-200 text-sm"
                                     >
                                         {link.name}
