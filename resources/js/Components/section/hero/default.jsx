@@ -44,7 +44,7 @@ export default function Hero({ heroes, className }) {
 
 	// Component untuk menampilkan multiple images dengan card grid
 	const ImageCardGrid = ({ images }) => (
-		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full pt-12">
+		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
 			{images.map((image, idx) => (
 				<div
 					key={idx}
@@ -98,7 +98,7 @@ export default function Hero({ heroes, className }) {
 		const displayType = item.images_display_type || 'slide';
 
 		return (
-			<div className="relative w-full pt-12">
+			<div className="relative w-full">
 				{displayType === 'slide' ? (
 					<ImageSlideCarousel images={item.images} />
 				) : (
