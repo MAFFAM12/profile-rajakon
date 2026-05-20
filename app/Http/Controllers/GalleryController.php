@@ -7,81 +7,44 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class GalleryController extends Controller
 {
     // Halaman utama (publik) - sudah ada
-    public function index()
+    public function index(Request $request)
     {
-        $galleries = Gallery::where('is_active', true)
-            ->orderBy('order')
-            ->get()
-            ->map(function ($item) {
+        $title = $request->query('title');
+        $year = $request->query('year');
+
+        $results = Gallery::query()
+            ->whereIn('id', function ($query) {
+                $query->selectRaw('MIN(id)')
+                    ->from('galleries')
+                    ->groupBy('title', 'year');
+            })
+            ->when($title, function ($query, $title) {
+                return $query->where('title', $title);
+            })
+            ->when($year, function ($query, $year) {
+                return $query->where('year', $year);
+            })
+            ->orderBy('year', 'desc');
+
+        $datas = $results->paginate(10)
+            ->withQueryString()
+            ->through(function ($item) {
                 return [
-                    'id' => $item->id,
+                    'id'    => $item->id,
                     'image' => Storage::url($item->image),
                     'title' => $item->title ?? null,
-                    'year' => $item->year ?? null,
+                    'year'  => $item->year ?? null,
                 ];
             });
 
-        return Inertia::render('Index', [
-            'galleries' => $galleries,
+        return response()->json([
+            'success' => true,
+            'results' => $datas,
         ]);
-    }
-
-    // Halaman admin: daftar + form upload
-    public function adminIndex()
-    {
-        $galleries = Gallery::orderBy('order')->get()->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'image' => Storage::url($item->image),
-                'title' => $item->title,
-                'order' => $item->order,
-                'is_active' => $item->is_active,
-            ];
-        });
-
-        return Inertia::render('Admin/Gallery', [
-            'galleries' => $galleries,
-        ]);
-    }
-
-    // Upload gambar baru
-    public function store(Request $request)
-    {
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'title' => 'nullable|string|max:255',
-            'order' => 'nullable|integer|min:0',
-        ]);
-
-        $path = $request->file('image')->store('gallery', 'public');
-
-        Gallery::create([
-            'image' => $path,
-            'title' => $request->title,
-            'order' => $request->order ?? Gallery::max('order') + 1,
-            'is_active' => true,
-        ]);
-
-        return redirect()->route('admin.gallery.index')
-            ->with('success', 'Gambar berhasil diupload!');
-    }
-
-    // Hapus gambar
-    public function destroy(Gallery $gallery)
-    {
-        // Hapus file dari storage kalau path ada dan valid
-        if ($gallery->image && is_string($gallery->image) && Storage::disk('public')->exists($gallery->image)) {
-            Storage::disk('public')->delete($gallery->image);
-        }
-
-        // Hapus record dari database
-        $gallery->delete();
-
-        return redirect()->route('admin.gallery.index')
-            ->with('success', 'Gambar berhasil dihapus!');
     }
 }
