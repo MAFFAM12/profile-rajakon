@@ -34,7 +34,7 @@ Route::get('/', function () {
                 $hero->images = array_map(function ($image) {
                     return (str_starts_with($image, 'http://') || str_starts_with($image, 'https://'))
                         ? $image
-                        : Storage::url($image);
+                        : Storage::disk('public')->url($image);
                 }, $hero->images);
 
                 $hero->hero_image = $hero->images[0];
@@ -42,7 +42,7 @@ Route::get('/', function () {
                 // Process single hero_image field
                 $hero->hero_image = (str_starts_with($hero->hero_image, 'http://') || str_starts_with($hero->hero_image, 'https://'))
                     ? $hero->hero_image
-                    : Storage::url($hero->hero_image);
+                    : Storage::disk('public')->url($hero->hero_image);
             }
 
             return $hero;
@@ -65,7 +65,7 @@ Route::get('/', function () {
             return [
                 'id'   => $item->id,
                 'name' => $item->name,
-                'logo' => Storage::url($item->logo),
+                'logo' => Storage::disk('public')->url($item->logo),
             ];
         });
 
@@ -97,7 +97,7 @@ Route::get('/', function () {
                 'judul'        => $item->judul,
                 'slug'         => $item->slug,
                 'excerpt'      => $item->excerpt,
-                'thumbnail'    => $item->thumbnail ? Storage::url($item->thumbnail) : null,
+                'thumbnail'    => $item->thumbnail ? Storage::disk('public')->url($item->thumbnail) : null,
                 'kategori'     => $item->kategori,
                 'published_at' => $item->published_at?->format('d M Y'),
             ];
@@ -116,7 +116,7 @@ Route::get('/', function () {
             'phone'               => $websiteSettings->phone,
             'email'               => $websiteSettings->email,
             'address'             => $websiteSettings->address,
-            'logo'                => $websiteSettings->logo ? Storage::url($websiteSettings->logo) : null,
+            'logo'                => $websiteSettings->logo ? Storage::disk('public')->url($websiteSettings->logo) : null,
             'social_media'        => $websiteSettings->social_media ?? [],
         ];
     }
@@ -155,7 +155,7 @@ Route::get('/tentang', function () {
             'phone'               => $websiteSettings->phone,
             'email'               => $websiteSettings->email,
             'address'             => $websiteSettings->address,
-            'logo'                => $websiteSettings->logo ? Storage::url($websiteSettings->logo) : null,
+            'logo'                => $websiteSettings->logo ? Storage::disk('public')->url($websiteSettings->logo) : null,
             'social_media'        => $websiteSettings->social_media ?? [],
         ];
     }
@@ -173,7 +173,7 @@ Route::get('/dokumentasi/{title}/{year}', function ($title, $year) {
         ->map(function ($item) {
             return [
                 'id'    => $item->id,
-                'image' => Storage::url($item->image),
+                'image' => Storage::disk('public')->url($item->image),
                 'title' => $item->title ?? null,
                 'year'  => $item->year ?? null,
             ];
