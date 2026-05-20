@@ -4,6 +4,18 @@ import Layout from '../Layouts/Layout';
 import DOMPurify from 'dompurify';
 
 const BlogDetail = ({ blog, related = [] }) => {
+    if (!blog) {
+        return (
+            <Layout>
+                <main className="relative z-10 py-20 px-6">
+                    <div className="max-w-7xl mx-auto w-full">
+                        <p className="text-center text-zinc-500">Blog tidak ditemukan.</p>
+                    </div>
+                </main>
+            </Layout>
+        );
+    }
+
     return (
         <Layout>
             <Head title={`${blog.judul} - Rajakon`} />
@@ -17,7 +29,7 @@ const BlogDetail = ({ blog, related = [] }) => {
                         <span>/</span>
                         <Link href="/blog" className="hover:text-zinc-800 transition">Blog</Link>
                         <span>/</span>
-                        <span className="text-zinc-800 dark:text-zinc-200 line-clamp-1">{blog.judul}</span>
+                        <span className="text-zinc-800 dark:text-zinc-200 line-clamp-2">{blog.judul}</span>
                     </nav>
 
                     {/* Meta */}
@@ -59,13 +71,12 @@ const BlogDetail = ({ blog, related = [] }) => {
                     {blog.konten && (
                         <div
                             className="prose prose-zinc dark:prose-invert max-w-none
-                                prose-headings:font-bold prose-headings:text-zinc-900
-                                prose-p:text-zinc-600 prose-p:leading-relaxed
-                                prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+                                prose-headings:font-bold prose-headings:text-zinc-900 dark:prose-headings:text-white
+                                prose-p:text-zinc-600 dark:prose-p:text-zinc-400 prose-p:leading-relaxed
+                                prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
                                 prose-img:rounded-xl prose-img:shadow-md
-                                prose-blockquote:border-blue-500 prose-blockquote:text-zinc-500
-                                prose-code:bg-zinc-100 prose-code:px-1 prose-code:rounded
-                                dark:prose-p:text-zinc-400 dark:prose-headings:text-white"
+                                prose-blockquote:border-blue-500 prose-blockquote:text-zinc-600 dark:prose-blockquote:text-zinc-400
+                                prose-code:bg-zinc-100 dark:prose-code:bg-zinc-800 prose-code:px-1.5 prose-code:rounded prose-code:text-zinc-900 dark:prose-code:text-zinc-100"
                             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog.konten || '') }}
                         />
                     )}
@@ -86,14 +97,14 @@ const BlogDetail = ({ blog, related = [] }) => {
 
                 {/* Artikel Terkait */}
                 {related.length > 0 && (
-                    <div className="max-w-6xl mx-auto mt-20">
+                    <div className="max-w-7xl mx-auto mt-20">
                         <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-8">
                             Artikel Terkait
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {related.map((item) => (
                                 <Link key={item.id} href={`/blog/${item.slug}`} className="group block">
-                                    <div className="rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:shadow-md transition-all">
+                                    <div className="rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:shadow-lg transition-all duration-300">
                                         <div className="aspect-[16/9] bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
                                             {item.thumbnail ? (
                                                 <img src={item.thumbnail} alt={item.judul} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -103,7 +114,7 @@ const BlogDetail = ({ blog, related = [] }) => {
                                         </div>
                                         <div className="p-4">
                                             <p className="text-xs text-zinc-400 mb-1">{item.published_at}</p>
-                                            <h3 className="font-semibold text-zinc-900 dark:text-white text-sm line-clamp-2 group-hover:text-blue-600 transition-colors">
+                                            <h3 className="font-semibold text-zinc-900 dark:text-white text-sm line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                                                 {item.judul}
                                             </h3>
                                         </div>
