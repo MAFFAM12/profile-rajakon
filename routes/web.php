@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 Route::get('/', function () {
     $heroes = Hero::where('status', true)
@@ -49,17 +50,13 @@ Route::get('/', function () {
         ->filter()
         ->values();
 
-    $galleries = Gallery::where('is_active', true)
-        ->orderBy('order')
-        ->get()
-        ->map(function ($item) {
-            return [
-                'id'    => $item->id,
-                'image' => Storage::url($item->image),
-                'title' => $item->title ?? null,
-                'year'  => $item->year ?? null,
-            ];
-        });
+    $galleries = Gallery::whereIn('id', function ($query) {
+        $query->selectRaw('MIN(id)')
+            ->from('galleries')
+            ->groupBy('title', 'year');
+    })
+        ->orderBy('year', 'asc')
+        ->get();
 
     $partners = Partner::where('is_active', true)
         ->orderBy('order')
@@ -138,12 +135,6 @@ Route::post('/contact-message', [KontakController::class, 'store'])
     ->name('contact.store')
     ->middleware('throttle:10,1');
 
-Route::prefix('admin')->group(function () {
-    Route::get('/gallery', [GalleryController::class, 'adminIndex'])->name('admin.gallery.index');
-    Route::post('/gallery', [GalleryController::class, 'store'])->name('admin.gallery.store');
-    Route::delete('/gallery/{id}', [GalleryController::class, 'destroy'])->name('admin.gallery.destroy');
-});
-
 Route::get('/katalog', [ProdukController::class, 'index'])->name('produk.index');
 Route::get('/produk/{slug}', [ProdukController::class, 'show'])->name('produk.show');
 
@@ -174,6 +165,23 @@ Route::get('/tentang', function () {
     ]);
 });
 
-Route::get('/run-convert-image', function () {
-    ConvertImages::dispatch();
+Route::get('/dokumentasi/{title}/{year}', function ($title, $year) {
+    $galleries = Gallery::whereLike('title', "%$title%")
+        ->where('year', $year)
+        ->where('is_active', true)
+        ->get()
+        ->map(function ($item) {
+            return [
+                'id'    => $item->id,
+                'image' => Storage::url($item->image),
+                'title' => $item->title ?? null,
+                'year'  => $item->year ?? null,
+            ];
+        });
+
+    return Inertia::render('DocumentationDetail', [
+        'title' => $title,
+        'year' => $year,
+        'galleries' => $galleries
+    ]);
 });
