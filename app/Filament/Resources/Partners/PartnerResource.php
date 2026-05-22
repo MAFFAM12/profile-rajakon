@@ -49,9 +49,7 @@ class PartnerResource extends Resource
                     ->image()
                     ->required()
                     ->disk('public')
-                    ->directory('partners')
                     ->imageEditor()
-                    ->maxSize(2048)
                     ->saveUploadedFileUsing(function (TemporaryUploadedFile $file): string {
                         return (new Partner())->uploadFile($file, 'partner-logos');
                     }),

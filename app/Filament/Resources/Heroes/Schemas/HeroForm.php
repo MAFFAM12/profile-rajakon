@@ -31,9 +31,7 @@ class HeroForm
                     ->default(true),
                 FileUpload::make('images')
                     ->disk('public')
-                    ->directory('hero-images')
                     ->acceptedFileTypes(['image/jpg', 'image/jpeg', 'image/png', 'image/webp'])
-                    ->maxSize(51200) // 50MB
                     ->multiple()
                     ->reorderable()
                     ->appendFiles()

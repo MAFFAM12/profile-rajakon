@@ -105,7 +105,6 @@ class ProdukResource extends Resource
                             ->appendFiles()
                             ->image()
                             ->disk('public')
-                            ->directory('produk')
                             ->columnSpanFull()
                             ->helperText('Foto pertama akan menjadi thumbnail di halaman utama')
                             ->saveUploadedFileUsing(function (TemporaryUploadedFile $file): string {

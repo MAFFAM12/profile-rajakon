@@ -62,9 +62,7 @@ class WebsiteSettingResource extends Resource
                             ->label('Logo Perusahaan')
                             ->image()
                             ->disk('public')
-                            ->directory('logos')
                             ->imageEditor()
-                            ->maxSize(2048)
                             ->saveUploadedFileUsing(function (TemporaryUploadedFile $file): string {
                                 return (new WebsiteSetting())->uploadFile($file, 'logo');
                             }),

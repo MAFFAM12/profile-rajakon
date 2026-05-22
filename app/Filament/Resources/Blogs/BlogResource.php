@@ -87,7 +87,6 @@ class BlogResource extends Resource
                             ->label('Gambar Thumbnail')
                             ->image()
                             ->disk('public')
-                            ->directory('blog')
                             ->columnSpanFull()
                             ->helperText('Gambar utama artikel yang ditampilkan di card')
                             ->saveUploadedFileUsing(function (TemporaryUploadedFile $file): string {

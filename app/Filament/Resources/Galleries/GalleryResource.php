@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Galleries;
 
 use App\Models\Gallery;
+use Filament\Actions\ActionGroup;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
@@ -19,12 +20,10 @@ use Filament\Actions\ViewAction;
 use Illuminate\Support\Carbon;
 use Filament\Infolists;
 use Filament\Infolists\Components\ImageEntry;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Support\Enums\TextSize;
 use Filament\Tables\Filters\TernaryFilter;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use Illuminate\Support\Str;
 
 class GalleryResource extends Resource
 {
@@ -45,10 +44,8 @@ class GalleryResource extends Resource
                     ->image()
                     ->required()
                     ->disk('public')
-                    ->directory('gallery')
                     ->preserveFilenames()
                     ->imageEditor()
-                    ->maxSize(2048)
                     ->saveUploadedFileUsing(function (TemporaryUploadedFile $file): string {
                         return (new Gallery())->uploadFile($file, 'galleries');
                     }),
@@ -99,7 +96,7 @@ class GalleryResource extends Resource
                         Infolists\Components\TextEntry::make('description')
                             ->label('Deskripsi Dokumentasi')
                             ->columnSpanFull()
-                            ->formatStateUsing(fn (string $state): string => nl2br(e($state)))
+                            ->formatStateUsing(fn(string $state): string => nl2br(e($state)))
                             ->html()
                             ->placeholder('Tidak ada deskripsi'),
                     ]),
@@ -150,7 +147,7 @@ class GalleryResource extends Resource
                 IconColumn::make('is_active')
                     ->label('Aktif')
                     ->boolean(),
-                    TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -168,8 +165,10 @@ class GalleryResource extends Resource
             ->headerActions([])
             ->actions([
                 ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make(),
+                ActionGroup::make([
+                    EditAction::make(),
+                    DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 DeleteBulkAction::make(),
