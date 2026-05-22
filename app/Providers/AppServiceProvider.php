@@ -28,7 +28,9 @@ class AppServiceProvider extends ServiceProvider
         Model::unguard();
 
         FileUpload::configureUsing(fn(FileUpload $fileUpload) => $fileUpload
-            ->visibility('public'));
+            ->visibility('public')
+            ->maxSize(10240)
+            ->helperText('Maks: 10MB'));
 
         ImageColumn::configureUsing(fn(ImageColumn $imageColumn) => $imageColumn
             ->visibility('public'));
