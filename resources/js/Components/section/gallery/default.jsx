@@ -10,6 +10,7 @@ const Gallery = ({ galleries }) => {
 	const [page, setPage] = useState(1);
 	const [results, setResults] = useState([]);
 	const [totalPage, setTotalPage] = useState(0);
+	const [years, setYears] = useState([]);
 	const [selectedTitle, setSelectedTitle] = useState('');
 	const [selectedYear, setSelectedYear] = useState('');
 
@@ -34,6 +35,14 @@ const Gallery = ({ galleries }) => {
 		} catch (error) {
 			console.error(error.message);
 		}
+	}
+
+	const getYear = () => {
+		return galleries.filter((value, index, self) =>
+			index === self.findIndex((t) => (
+				t.year === value.year
+			))
+		)
 	}
 
 	const loadMore = async () => {
@@ -133,7 +142,7 @@ const Gallery = ({ galleries }) => {
 									className='w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all hover:border-gray-400'
 								>
 									<option value="">Semua Tahun</option>
-									{galleries?.map((item, index) => (
+									{getYear()?.map((item, index) => (
 										<option key={index} value={item.year}>{item.year}</option>
 									))}
 								</select>
@@ -162,34 +171,34 @@ const Gallery = ({ galleries }) => {
 											href={`/dokumentasi/${slug}`}
 											className="relative animate-appear cursor-pointer rounded-xl group overflow-hidden h-fit w-full"
 										>
-										<div
-											style={{
-												backgroundImage: `url('${item.image}')`
-											}}
-											className='aspect-square bg-cover bg-center rounded-xl group-hover:scale-105 transition-transform ease-in'
-										/>
+											<div
+												style={{
+													backgroundImage: `url('${item.image}')`
+												}}
+												className='aspect-square bg-cover bg-center rounded-xl group-hover:scale-105 transition-transform ease-in'
+											/>
 
-										{/* Hover Overlay dengan Judul */}
-										{item.title && (
-											<div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/70 via-black/50 to-transparent 
+											{/* Hover Overlay dengan Judul */}
+											{item.title && (
+												<div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/70 via-black/50 to-transparent 
 											flex flex-col justify-end p-4">
-												<div className="translate-y-12 group-hover:translate-y-0 transition-transform duration-300">
-													{item.year && (
-														<span className="text-white/60 text-xs font-medium tracking-widest uppercase mb-1 block">
-															{item.year}
-														</span>
-													)}
-													<p className="text-white font-semibold text-sm leading-snug drop-shadow mb-4">
-														{item.title}
-													</p>
+													<div className="translate-y-12 group-hover:translate-y-0 transition-transform duration-300">
+														{item.year && (
+															<span className="text-white/60 text-xs font-medium tracking-widest uppercase mb-1 block">
+																{item.year}
+															</span>
+														)}
+														<p className="text-white font-semibold text-sm leading-snug drop-shadow mb-4">
+															{item.title}
+														</p>
+													</div>
+													<Button className={'opacity-0 group-hover:opacity-100 transition-all backdrop-blur-md translate-y-10 group-hover:translate-y-0'}>
+														Selengkapnya
+													</Button>
 												</div>
-												<Button className={'opacity-0 group-hover:opacity-100 transition-all backdrop-blur-md translate-y-10 group-hover:translate-y-0'}>
-													Selengkapnya
-												</Button>
-											</div>
-										)}
-									</a>
-								);
+											)}
+										</a>
+									);
 								})}
 							</div>
 
