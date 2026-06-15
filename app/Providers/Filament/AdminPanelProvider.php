@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\AppInventories\AppInventoryResource;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Filament\Support\Enums\Width;
@@ -75,6 +76,7 @@ class AdminPanelProvider extends PanelProvider
                         ->isActiveWhen(fn(): bool => request()->routeIs('filament.admin.pages.dashboard'))
                         ->url(fn(): string => Dashboard::getUrl()),
                     ...KontakResource::getNavigationItems(),
+                    ...AppInventoryResource::getNavigationItems(),
                 ])
                     ->groups([
                         NavigationGroup::make('Manage Content')
