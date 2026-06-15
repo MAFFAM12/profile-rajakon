@@ -1,17 +1,14 @@
 <?php
 
 use App\Http\Controllers\KontakController;
-use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\BlogController;
-use App\Jobs\ConvertImages;
 use App\Models\Hero;
 use App\Models\Produk;
 use App\Models\Blog;
 use App\Models\Gallery;
 use App\Models\Partner;
 use App\Models\WebsiteSetting;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -53,7 +50,7 @@ Route::get('/', function () {
     $galleries = Gallery::whereIn('id', function ($query) {
         $query->selectRaw('MIN(id)')
             ->from('galleries')
-            ->groupBy('title', 'year');
+            ->groupBy('title');
     })
         ->orderBy('year', 'desc')
         ->get();
