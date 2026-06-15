@@ -7,6 +7,8 @@ use Illuminate\Support\ServiceProvider;
 use Filament\Forms\Components\FileUpload;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,7 +28,9 @@ class AppServiceProvider extends ServiceProvider
         Model::unguard();
 
         FileUpload::configureUsing(fn(FileUpload $fileUpload) => $fileUpload
-            ->visibility('public'));
+            ->visibility('public')
+            ->maxSize(10240)
+            ->helperText('Maks: 10MB'));
 
         ImageColumn::configureUsing(fn(ImageColumn $imageColumn) => $imageColumn
             ->visibility('public'));

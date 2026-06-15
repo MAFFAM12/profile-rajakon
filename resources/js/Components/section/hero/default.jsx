@@ -44,7 +44,7 @@ export default function Hero({ heroes, className }) {
 
 	// Component untuk menampilkan multiple images dengan card grid
 	const ImageCardGrid = ({ images }) => (
-		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full pt-12">
+		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
 			{images.map((image, idx) => (
 				<div
 					key={idx}
@@ -98,7 +98,7 @@ export default function Hero({ heroes, className }) {
 		const displayType = item.images_display_type || 'slide';
 
 		return (
-			<div className="relative w-full pt-12">
+			<div className="relative w-full">
 				{displayType === 'slide' ? (
 					<ImageSlideCarousel images={item.images} />
 				) : (
@@ -134,11 +134,12 @@ export default function Hero({ heroes, className }) {
 					{
 						heroes?.map((item, index) => (
 							<SwiperSlide key={index}>
-								<div className="flex flex-col items-center gap-6 text-center sm:gap-12">
-									<h1 className="animate-appear from-foreground to-foreground dark:to-muted-foreground relative z-10 inline-block bg-linear-to-r bg-clip-text text-4xl leading-tight font-semibold text-balance text-transparent drop-shadow-2xl sm:text-6xl sm:leading-tight md:text-8xl md:leading-tight">
+								<div className="flex flex-col items-start md:items-center gap-6 text-center sm:gap-12">
+									{renderImages(item)}
+									<h1 className="text-left md:text-center animate-appear from-foreground to-foreground dark:to-muted-foreground relative z-10 inline-block bg-linear-to-r bg-clip-text text-4xl leading-tight font-semibold text-balance text-transparent drop-shadow-2xl sm:text-6xl sm:leading-tight md:text-8xl md:leading-tight">
 										{item.heading}
 									</h1>
-									<p className="text-md animate-appear text-muted-foreground relative z-10 font-medium text-balance opacity-0 delay-100 sm:text-xl">
+									<p className="text-left md:text-center text-md animate-appear text-muted-foreground relative z-10 font-medium text-balance opacity-0 delay-100 sm:text-xl">
 										{item.sub_heading}
 									</p>
 									<div className="animate-appear relative z-10 flex justify-center gap-4 opacity-0 delay-300">
@@ -152,7 +153,6 @@ export default function Hero({ heroes, className }) {
 											</a>
 										</Button>
 									</div>
-									{renderImages(item)}
 								</div>
 							</SwiperSlide>
 						))

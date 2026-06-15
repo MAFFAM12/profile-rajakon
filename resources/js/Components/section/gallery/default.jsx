@@ -1,212 +1,218 @@
 import React, { useState, useEffect } from 'react';
-import { FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
 import { Section } from '../../ui/section';
+import { WhenVisible } from '@inertiajs/react';
+import { Button } from '../../ui/button';
 
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 10;
+const appUrl = import.meta.env.VITE_APP_URL || 'http://localhost:8000';
 
-const Gallery = ({ galleries = [] }) => {
-	const [currentPage, setCurrentPage] = useState(1);
-	const [selectedIndex, setSelectedIndex] = useState(null);
+const Gallery = ({ galleries }) => {
+	const [page, setPage] = useState(1);
+	const [results, setResults] = useState([]);
+	const [totalPage, setTotalPage] = useState(0);
+	const [years, setYears] = useState([]);
+	const [selectedTitle, setSelectedTitle] = useState('');
+	const [selectedYear, setSelectedYear] = useState('');
 
-	const totalPages = Math.ceil(galleries.length / ITEMS_PER_PAGE);
-	const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-	const currentGalleries = galleries.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+	const getList = async () => {
+		try {
+			let response = await axios.get(`${appUrl}/api/gallery`, {
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				params: {
+					'title': selectedTitle,
+					'year': selectedYear,
+				}
+			})
 
-	const goToPage = (page) => {
-		if (page >= 1 && page <= totalPages) {
-			setCurrentPage(page);
-			window.scrollTo({ top: 0, behavior: 'smooth' });
+			const { data, status } = response;
+
+			if (data.success && status === 200) {
+				setResults(data.results.data);
+				setTotalPage(data.results.last_page);
+			}
+		} catch (error) {
+			console.error(error.message);
 		}
-	};
+	}
 
-	const showPrevImage = () => {
-		if (selectedIndex > 0) setSelectedIndex(selectedIndex - 1);
-	};
+	const getYear = () => {
+		return galleries.filter((value, index, self) =>
+			index === self.findIndex((t) => (
+				t.year === value.year
+			))
+		)
+	}
 
-	const showNextImage = () => {
-		if (selectedIndex < galleries.length - 1) setSelectedIndex(selectedIndex + 1);
-	};
+	const loadMore = async () => {
+		try {
+			let response = await axios.get(`${appUrl}/api/gallery?page=${page + 1}`, {
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				params: {
+					'title': selectedTitle,
+					'year': selectedYear,
+				}
+			})
 
-	const closePreview = () => setSelectedIndex(null);
+			const { data, status } = response;
+
+			if (data.success && status === 200) {
+				setResults([...results, ...data.results.data]);
+				setPage(page + 1);
+			}
+		} catch (error) {
+			console.error(error.message);
+		}
+	}
+
+	const handleFilter = () => {
+		setPage(1);
+		let filteredResults = results;
+
+		if (selectedTitle) {
+			filteredResults = filteredResults.filter(item => item.title === selectedTitle);
+		}
+
+		if (selectedYear) {
+			filteredResults = filteredResults.filter(item => item.year === selectedYear);
+		}
+
+		setResults(filteredResults);
+	}
+
+	const resetFilter = () => {
+		setSelectedTitle('');
+		setSelectedYear('');
+		setPage(1);
+	}
 
 	useEffect(() => {
-		const handleKeyDown = (e) => {
-			if (e.key === 'Escape') closePreview();
-			if (e.key === 'ArrowLeft') showPrevImage();
-			if (e.key === 'ArrowRight') showNextImage();
-		};
-
-		if (selectedIndex !== null) {
-			document.addEventListener('keydown', handleKeyDown);
-			document.body.style.overflow = 'hidden';
-		}
-
-		return () => {
-			document.removeEventListener('keydown', handleKeyDown);
-			document.body.style.overflow = 'auto';
-		};
-	}, [selectedIndex]);
+		getList();
+	}, [selectedTitle, selectedYear])
 
 	return (
 		<Section id="dokumentasi">
-			<div className="max-w-7xl mx-auto">
+			<div className="max-w-container mx-auto flex flex-col items-center gap-6 sm:gap-20">
+				<div className="max-w-7xl mx-auto w-full">
 
-				{/* Header */}
-				<div className="text-center mb-16">
-					<h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 animate-appear">
-						Dokumentasi
-					</h2>
-					<p className="text-lg text-gray-600 max-w-3xl mx-auto animate-appear opacity-0 delay-75">
-						Dokumentasi dari kegiatan dan pekerjaan yang kami lakukan di lapangan.
-					</p>
-				</div>
+					{/* Header */}
+					<div className="text-left md:text-center mb-16">
+						<h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 animate-appear">
+							Dokumentasi
+						</h2>
+						<p className="text-md md:text-lg text-gray-600 max-w-3xl mx-auto animate-appear opacity-0 delay-75">
+							Dokumentasi dari kegiatan dan pekerjaan yang kami lakukan di lapangan.
+						</p>
+					</div>
 
-				{/* Gallery Grid */}
-				{galleries.length === 0 ? (
-					<p className="text-center text-gray-400">Belum ada dokumentasi yang ditambahkan.</p>
-				) : (
-					<div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4 animate-appear opacity-0 duration-300">
-						{currentGalleries.map((item, index) => (
-							<div
-								key={item.id}
-								className="break-inside-avoid cursor-pointer overflow-hidden rounded-xl relative group"
-								onClick={() => setSelectedIndex(startIndex + index)}
-							>
-								<img
-									className="w-full h-auto object-cover rounded-xl bg-gray-100 group-hover:scale-105 transition-transform duration-500"
-									src={item.image}
-									alt={item.title ?? 'Gallery'}
-								/>
-
-								{/* Hover Overlay dengan Judul */}
-								{item.title && (
-									<div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/70 via-black/20 to-transparent 
-										opacity-0 group-hover:opacity-100 transition-all duration-300 
-										flex flex-col justify-end p-4">
-										<div className="translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-											{item.year && (
-												<span className="text-white/60 text-xs font-medium tracking-widest uppercase mb-1 block">
-													{item.year}
-												</span>
-											)}
-											<p className="text-white font-semibold text-sm leading-snug drop-shadow">
-												{item.title}
-											</p>
-										</div>
-									</div>
-								)}
+					{/* Filter Section */}
+					<div className='bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-4 sm:p-6 mb-8 border border-gray-200 shadow-sm'>
+						<h3 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
+							<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+							</svg>
+							Filter
+						</h3>
+						<div className='grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4'>
+							<div>
+								<label htmlFor="title" className='block text-sm font-medium text-gray-700 mb-2'>
+									Pekerjaan
+								</label>
+								<select
+									id='title'
+									onChange={e => setSelectedTitle(e.target.value)}
+									className='w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all hover:border-gray-400'
+								>
+									<option value="">Semua Pekerjaan</option>
+									{galleries?.map((item, index) => (
+										<option key={index} value={item.title}>{item.title}</option>
+									))}
+								</select>
 							</div>
-						))}
-					</div>
-				)}
-
-				{/* Pagination */}
-				{totalPages > 1 && (
-					<div className="flex justify-center items-center mt-12 gap-2">
-						<button
-							onClick={() => goToPage(currentPage - 1)}
-							disabled={currentPage === 1}
-							className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-300 transition"
-						>
-							Prev
-						</button>
-
-						{Array.from({ length: totalPages }, (_, i) => (
-							<button
-								key={i}
-								onClick={() => goToPage(i + 1)}
-								className={`px-4 py-2 rounded-lg transition ${currentPage === i + 1
-									? 'bg-blue-600 text-white'
-									: 'bg-gray-100 hover:bg-gray-200'
-									}`}
-							>
-								{i + 1}
-							</button>
-						))}
-
-						<button
-							onClick={() => goToPage(currentPage + 1)}
-							disabled={currentPage === totalPages}
-							className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-300 transition"
-						>
-							Next
-						</button>
-					</div>
-				)}
-			</div>
-
-			{/* IMAGE PREVIEW MODAL */}
-			{selectedIndex !== null && (
-				<div
-					className="fixed inset-0 bg-black/95 flex items-center justify-center z-50"
-					onClick={closePreview}
-				>
-					<div
-						className="relative flex flex-col items-center justify-center px-16 max-w-5xl w-full"
-						onClick={(e) => e.stopPropagation()}
-					>
-						{/* Close */}
-						<button
-							onClick={closePreview}
-							className="absolute -top-12 right-0 text-white/70 hover:text-white text-2xl hover:scale-110 transition"
-						>
-							<FaTimes />
-						</button>
-
-						{/* Previous */}
-						<button
-							onClick={showPrevImage}
-							disabled={selectedIndex === 0}
-							className="absolute left-0 text-white/70 hover:text-white text-3xl hover:scale-110 disabled:opacity-20 transition"
-						>
-							<FaChevronLeft />
-						</button>
-
-						{/* Image */}
-						<img
-							src={galleries[selectedIndex].image}
-							alt={galleries[selectedIndex].title ?? ''}
-							className="max-h-[78vh] max-w-[90vw] rounded-xl shadow-2xl object-contain"
-						/>
-
-						{/* Title & Meta di bawah gambar */}
-						<div className="mt-5 text-center">
-							{galleries[selectedIndex].title ? (
-								<>
-									<p className="text-white font-semibold text-lg tracking-wide">
-										{galleries[selectedIndex].title}
-									</p>
-									{galleries[selectedIndex].year && (
-										<p className="text-white/40 text-sm mt-1 tracking-widest uppercase">
-											{galleries[selectedIndex].year}
-										</p>
-									)}
-								</>
-							) : (
-								<p className="text-white/40 text-sm tracking-widest">
-									{selectedIndex + 1} / {galleries.length}
-								</p>
-							)}
-
-							{/* Counter */}
-							{galleries[selectedIndex].title && (
-								<p className="text-white/30 text-xs mt-2">
-									{selectedIndex + 1} / {galleries.length}
-								</p>
-							)}
+							<div>
+								<label htmlFor="year" className='block text-sm font-medium text-gray-700 mb-2'>
+									Tahun
+								</label>
+								<select
+									id='year'
+									onChange={e => setSelectedYear(e.target.value)}
+									className='w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all hover:border-gray-400'
+								>
+									<option value="">Semua Tahun</option>
+									{getYear()?.map((item, index) => (
+										<option key={index} value={item.year}>{item.year}</option>
+									))}
+								</select>
+							</div>
 						</div>
-
-						{/* Next */}
-						<button
-							onClick={showNextImage}
-							disabled={selectedIndex === galleries.length - 1}
-							className="absolute right-0 text-white/70 hover:text-white text-3xl hover:scale-110 disabled:opacity-20 transition"
-						>
-							<FaChevronRight />
-						</button>
+						<div>
+							<Button onClick={resetFilter} disabled={selectedTitle === '' && selectedYear === ''}>Reset</Button>
+						</div>
 					</div>
+
+					{/* Gallery Grid */}
+					{results.length === 0 ? (
+						<p className="text-center text-gray-400 p-4 bg-gray-200 rounded-xl">Belum ada dokumentasi yang ditambahkan.</p>
+					) : (
+						<WhenVisible data={[results]} fallback={() => (
+							<div className='text-center'>
+								<p>Loading...</p>
+							</div>
+						)}>
+							<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 space-y-4 animate-appear opacity-0 duration-300">
+								{results.map((item, index) => {
+									const slug = `${item.title}-${item.year}`.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+									return (
+										<a
+											key={item.id}
+											href={`/dokumentasi/${slug}`}
+											className="relative animate-appear cursor-pointer rounded-xl group overflow-hidden h-fit w-full"
+										>
+											<div
+												style={{
+													backgroundImage: `url('${item.image}')`
+												}}
+												className='aspect-square bg-cover bg-center rounded-xl group-hover:scale-105 transition-transform ease-in'
+											/>
+
+											{/* Hover Overlay dengan Judul */}
+											{item.title && (
+												<div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/70 via-black/50 to-transparent 
+											flex flex-col justify-end p-4">
+													<div className="translate-y-12 group-hover:translate-y-0 transition-transform duration-300">
+														{item.year && (
+															<span className="text-white/60 text-xs font-medium tracking-widest uppercase mb-1 block">
+																{item.year}
+															</span>
+														)}
+														<p className="text-white font-semibold text-sm leading-snug drop-shadow mb-4">
+															{item.title}
+														</p>
+													</div>
+													<Button className={'opacity-0 group-hover:opacity-100 transition-all backdrop-blur-md translate-y-10 group-hover:translate-y-0'}>
+														Selengkapnya
+													</Button>
+												</div>
+											)}
+										</a>
+									);
+								})}
+							</div>
+
+							{
+								page < totalPage ? (
+									<div className="flex items-center justify-center mt-8">
+										<Button onClick={loadMore}>Lihat Lainnya</Button>
+									</div>
+								) : null
+							}
+						</WhenVisible>
+					)}
 				</div>
-			)}
+			</div>
 		</Section>
 	);
 };

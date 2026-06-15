@@ -1,4 +1,4 @@
-import { Award, Building, CheckCircle, Clock, Cog, Hammer, Mail, MapPin, Phone, Shield, Truck, Users, Wrench, Zap } from "lucide-react";
+import { Award, Building, CheckCircle, Clock, Cog, Cpu, Hammer, Mail, MapPin, Phone, Shield, Truck, Users, Wrench, Zap } from "lucide-react";
 
 export const benefits = [
     {
@@ -53,10 +53,10 @@ export const mainBenefits = [
 
 export const services = [
     {
-        icon: Building,
-        title: 'Layanan Konstruksi',
-        description: 'Solusi konstruksi lengkap mulai dari perencanaan hingga penyelesaian, termasuk pekerjaan sipil, rekayasa struktural, dan manajemen proyek.',
-        features: ['Rekayasa Sipil', 'Desain Struktural', 'Manajemen Proyek', 'Kontrol Kualitas']
+        icon: Cpu,
+        title: 'Layanan Teknologi Informasi',
+        description: 'Solusi teknologi informasi lengkap mulai dari perencanaan hingga penyelesaian, SCADA, CCTV, rekayasa perangkat lunak, dan network.',
+        features: ['SCADA', 'CCTV', 'Software House', 'Network']
     },
     {
         icon: Cog,

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import Layout from '../Layouts/Layout';
+import DOMPurify from 'dompurify';
 
 const ZoomImage = ({ src, alt }) => {
     const [zoomed, setZoomed] = useState(false);
@@ -71,7 +72,7 @@ const ProdukDetail = ({ produk }) => {
             <Head title={`${produk.nama} - Rajakon`} />
 
             <main className="relative z-10 py-20 px-6">
-                <div className="max-w-5xl mx-auto">
+                <div className="max-w-7xl mx-auto w-full">
 
                     {/* Breadcrumb */}
                     <nav className="flex items-center gap-2 text-sm text-gray-500 mb-10">
@@ -118,7 +119,7 @@ const ProdukDetail = ({ produk }) => {
 
                         {/* Detail */}
                         <div className="flex-1">
-                            <span className="inline-block border border-red-500 text-red-500 text-xs font-semibold px-3 py-1 rounded-full mb-4 tracking-wide uppercase">
+                            <span className="inline-block border border-blue-500 text-blue-500 text-xs font-semibold px-3 py-1 rounded-full mb-4 tracking-wide uppercase">
                                 {produk.badge ?? 'Produk'}
                             </span>
 
@@ -133,7 +134,12 @@ const ProdukDetail = ({ produk }) => {
                             )}
 
                             <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed text-base">
-                                {produk.deskripsi}
+                                <span
+                                    className='prose text-[#57606a] dark:text-[#8b949e]'
+                                    dangerouslySetInnerHTML={{
+                                        __html: DOMPurify.sanitize(produk?.deskripsi || '')
+                                    }}
+                                />
                             </p>
 
                             {produk.manfaat?.length > 0 && (

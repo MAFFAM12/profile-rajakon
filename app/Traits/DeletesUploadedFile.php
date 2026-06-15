@@ -31,7 +31,7 @@ trait DeletesUploadedFile
     /**
      * Override in model to define which attributes are file paths.
      */
-    protected function uploadAttributes(): array
+    public function uploadAttributes(): array
     {
         return []; // default
     }
@@ -41,6 +41,6 @@ trait DeletesUploadedFile
      */
     protected function uploadDisk(): string
     {
-        return 'public_upload'; // default disk
+        return 'public'; // default disk
     }
 }

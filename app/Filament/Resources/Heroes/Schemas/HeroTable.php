@@ -6,7 +6,7 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 
 class HeroTable
@@ -29,19 +29,23 @@ class HeroTable
                 IconColumn::make('status')
                     ->boolean(),
                 TextColumn::make('creator.name')
-                    ->label('Dibuat oleh'),
+                    ->label('Dibuat oleh')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updater.name')
-                    ->label('Diubah oleh'),
+                    ->label('Diubah oleh')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
-                    ->dateTime(),
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('status')
-                    ->options([
-                        true => 'Aktif',
-                        false => 'Non Aktif',
-                    ])
-                    ->native(false)
+                TernaryFilter::make('is_active')
+                    ->label('Status Tampil'),
             ])
             ->recordActions([
                 ViewAction::make(),

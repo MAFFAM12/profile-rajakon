@@ -3,6 +3,7 @@ import { Section } from '../../ui/section'
 import { cn } from '../../../utils/cn'
 import { Eye, Play, Target } from 'lucide-react'
 import CardHoverEffect from '../../ui/card-hover-effect'
+import { Link } from '@inertiajs/react';
 import { Button } from '../../ui/button'
 
 function About({ className }) {
@@ -30,7 +31,7 @@ function About({ className }) {
                 <div className='relative z-20'>
                     <div className="mx-auto w-full max-w-container">
                         <div>
-                            <h3 className="text-4xl font-bold text-gray-900 mb-6">Tentang Kami</h3>
+                            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 animate-appear">Sekilas Tentang Kami</h2>
                             <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6'>
                                 <div className='space-y-6'>
                                     <div
@@ -41,9 +42,7 @@ function About({ className }) {
                                         <CardHoverEffect hoveredIndex={hoveredIndex} index={0} />
                                         <div className='animate-appear space-y-6 text-gray-600 text-sm md:text-base p-8 glass-2 shadow-lg rounded-3xl relative z-20'>
                                             <p>
-                                                PT. Rajakon Teknik didirikan dengan visi untuk mentransformasi lanskap layanan teknis
-                                                di Indonesia. Dengan pengalaman bertahun-tahun dan komitmen
-                                                terhadap keunggulan, kami telah menjadi mitra tepercaya bagi berbagai bisnis di berbagai industri.
+                                                PT. Rajakon Teknik bergerak dalam bidang pengadaan barang dan jasa dengan SDM berpengalaman,profesional, dan inovatif (bersertifikat tenaga ahli ESDM), berkomitmen untuk memberikan layanan berkualitas tinggi dengan fokus pada inovasi dan kepuasan pelanggan.
                                             </p>
                                             <p>
                                                 Perusahaan kami berspesialisasi dalam menyediakan solusi teknis komprehensif
@@ -56,12 +55,25 @@ function About({ className }) {
                                                 kami sebagai pemimpin dalam layanan teknis, dengan senantiasa mempertahankan nilai-nilai inti
                                                 kami, yaitu kualitas, integritas, dan kepuasan pelanggan.
                                             </p>
-                                            <Button asChild>
-                                                <a href="https://youtu.be/5gHpzE596gc?si=p52sO8XC7Q5hx_ig" target='_blank'>
+
+                                            <div className='space-x-4'>
+                                                <Button asChild>
+                                                    {/* <a href="https://youtu.be/5gHpzE596gc?si=p52sO8XC7Q5hx_ig" target='_blank'>
                                                     Tonton Video
                                                     <Play className='size-4 ml-2' />
-                                                </a>
-                                            </Button>
+                                                </a> */}
+                                                    <Link
+                                                        href={`/tentang`}
+                                                        className="inline-flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-medium text-sm hover:gap-3 transition-all duration-200"
+                                                    >Selengkapnya</Link>
+                                                </Button>
+                                                <Button asChild>
+                                                    <a href="https://youtu.be/5gHpzE596gc?si=p52sO8XC7Q5hx_ig" target='_blank'>
+                                                        Tonton Video
+                                                        <Play className='size-4 ml-2' />
+                                                    </a>
+                                                </Button>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -106,7 +118,7 @@ function About({ className }) {
                                 >
                                     <CardHoverEffect hoveredIndex={hoveredIndex} index={3} />
                                     <img
-                                        src="https://rajakon.com/public/dokumentasi/1644304207_IMG_20211025_101910877.jpg"
+                                        src="/assets/img/about-rajakon.webp"
                                         alt="Karyawan PT. Rajakon Teknik sedang melakukan thermovisi pada sebuah panel saat pelaksanaan assessment kelistrikan kantor cabang dan pusat Bank BJB seluruh indonesia"
                                         className='h-full w-full animate-appear opacity-0 delay-700 rounded-3xl shadow-lg relative z-20'
                                     />

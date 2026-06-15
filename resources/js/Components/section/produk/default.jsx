@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Section } from '../../ui/section';
 import { Link } from '@inertiajs/react';
+import DOMPurify from 'dompurify';
+import { Button } from '../../ui/button'
 
 const ProdukCard = ({ produk, index }) => {
     const isEven = index % 2 === 0;
@@ -12,12 +14,12 @@ const ProdukCard = ({ produk, index }) => {
         <div
             className={`flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} 
                 items-center gap-10 md:gap-16 mb-24 last:mb-0 
-                animate-appear opacity-0`}
+                animate-appear opacity-0 w-full`}
             style={{ animationDelay: `${index * 100}ms` }}
         >
             {/* Teks */}
             <div className="flex-1 w-full">
-                <span className="inline-block border border-red-500 text-red-500 text-xs font-semibold px-3 py-1 rounded-full mb-5 tracking-wide uppercase">
+                <span className="inline-block border border-blue-500 text-blue-500 text-xs font-semibold px-3 py-1 rounded-full mb-5 tracking-wide uppercase">
                     {produk.badge ?? 'Produk'}
                 </span>
 
@@ -26,9 +28,13 @@ const ProdukCard = ({ produk, index }) => {
                 </h3>
 
                 <p className="text-gray-600 dark:text-gray-400 mb-5 leading-relaxed text-base">
-                    {produk.deskripsi?.length > 220
-                        ? produk.deskripsi.slice(0, 220) + '...'
-                        : produk.deskripsi}
+                    <span
+                        dangerouslySetInnerHTML={{
+                            __html: produk?.deskripsi?.length > 220
+                                ? DOMPurify.sanitize(produk.deskripsi.slice(0, 220) + '...' || '')
+                                : DOMPurify.sanitize(produk?.deskripsi || '')
+                        }}
+                    />
                 </p>
 
                 {produk.manfaat?.length > 0 && (
@@ -39,7 +45,7 @@ const ProdukCard = ({ produk, index }) => {
                         <ul className="text-gray-600 dark:text-gray-400 space-y-1 text-sm">
                             {produk.manfaat.slice(0, 2).map((m, i) => (
                                 <li key={i} className="flex items-start gap-2">
-                                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
+                                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
                                     {m.item ?? m}
                                 </li>
                             ))}
@@ -51,7 +57,7 @@ const ProdukCard = ({ produk, index }) => {
                     href={`/produk/${produk.slug}`}
                     className="inline-flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-medium text-sm hover:gap-3 transition-all duration-200"
                 >
-                    Lihat produk
+                    Lihat
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -82,28 +88,36 @@ const ProdukCard = ({ produk, index }) => {
 const Produk = ({ produks = [] }) => {
     return (
         <Section id="produk">
-            <div className="max-w-5xl mx-auto">
-
-                {/* Header */}
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 animate-appear">
-                        Produk Dan Jasa
-                    </h2>
-                    <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto animate-appear opacity-0 delay-75">
-                        Solusi terbaik yang kami tawarkan untuk kebutuhan Anda.
-                    </p>
-                </div>
-
-                {/* List Produk */}
-                {produks.length === 0 ? (
-                    <p className="text-center text-gray-400">Belum ada produk yang ditambahkan.</p>
-                ) : (
-                    <div>
-                        {produks.map((produk, index) => (
-                            <ProdukCard key={produk.id} produk={produk} index={index} />
-                        ))}
+            <div
+                className="max-w-container mx-auto flex flex-col items-center gap-6 sm:gap-20">
+                <div className="max-w-7xl mx-auto w-full">
+                    {/* Header */}
+                    <div className="text-left md:text-center mb-16">
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 animate-appear">
+                            Produk Dan Jasa
+                        </h2>
+                        <p className="text-md md:text-lg text-gray-600 max-w-3xl mx-auto animate-appear opacity-0 delay-75">
+                            Solusi terbaik yang kami tawarkan untuk kebutuhan Anda.
+                        </p>
                     </div>
-                )}
+
+                    {/* List Produk */}
+                    {produks.length === 0 ? (
+                        <p className="text-center text-gray-400">Belum ada produk yang ditambahkan.</p>
+                    ) : (
+                        produks.map((produk, index) => (
+                            <ProdukCard key={produk.id} produk={produk} index={index} />
+                        ))
+                    )}
+
+                    <div className='flex justify-center'>
+                        <Button asChild>
+                            <Link href={'/katalog'}>
+                                Produk & Jasa Lainnya
+                            </Link>
+                        </Button>
+                    </div>
+                </div>
             </div>
         </Section>
     );

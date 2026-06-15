@@ -51,7 +51,7 @@ function ItemDescription({
 		<div
 			data-slot="item-description"
 			className={cn(
-				"text-muted-foreground flex max-w-[240px] flex-col gap-2 text-sm text-balance",
+				"text-muted-foreground flex flex-col gap-2 text-sm text-balance",
 				className
 			)}
 			{...props} />

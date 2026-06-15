@@ -10,11 +10,11 @@ const Service = () => {
                 className="max-w-container mx-auto flex flex-col items-center gap-6 sm:gap-20">
                 <div className="max-w-7xl mx-auto">
                     {/* Section Header */}
-                    <div className="text-center mb-16">
+                    <div className="text-left md:text-center mb-16">
                         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 animate-appear">
                             Layanan Kami
                         </h2>
-                        <p className="text-lg text-gray-600 max-w-3xl mx-auto animate-appear opacity-0 delay-75">
+                        <p className="text-md md:text-lg text-gray-600 max-w-3xl mx-auto animate-appear opacity-0 delay-75">
                             Kami menawarkan berbagai layanan teknis komprehensif yang dirancang untuk memenuhi
                             beragam kebutuhan bisnis modern dan proyek infrastruktur.
                         </p>
@@ -55,7 +55,7 @@ const Service = () => {
                     </div>
 
                     {/* Call to Action */}
-                    <div className="text-center mt-16 animate-appear opacity-0 delay-500">
+                    <div className="text-left md:text-center mt-16 animate-appear opacity-0 delay-500">
                         <div className="bg-linear-to-b from-primary/50 to-primary/100 h-full transition-shadow duration-300 hover:shadow-lg shadow-primary/50 rounded-3xl p-8 md:p-12 text-white">
                             <h3 className="text-2xl md:text-3xl font-bold mb-4">
                                 Siap Memulai Proyek Anda?
